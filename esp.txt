@@ -1,0 +1,74 @@
+Regles allumage hotte :
+	- Quand la lumiere de la cuisine est allumée = allumer la hotte
+	- eteindre quand :
+			- 10 minutes apres l'extinction de la cuisine.
+
+
+Carte WS2812B :
+	2 sorties bande LED
+	2 sorties LED + transistor ?
+	2 entrées avec pullup
+
+
+
+
+Buget Conso par Carte :
+	- 16 IN : 20mA sous 5V par entrée. "Moyenne"  de 8 entrées actives en simultané au max. = 160mA
+		- 230mA pour l'ESP = Total de 390mA en pointe maxi. surement quelques mA au repos.
+	- 7 Relais :
+	- 8 Reed
+	- Velux :
+
+
+Toutes cartes :
+	/!\ changedevicename : maximum 32 caracteres :
+
+	Topics MQTT communs :
+		esp/#devicename#/system/reboot							redémarre le device
+		esp/#devicename#/system/report							demande au device d'envoyer un report complet :
+			esp/#devicename#/system/rssi								renvoie le RSSI en dBm
+			esp/#devicename#/system/dnsip								renvoie l'adresse ip du DNS configuré
+			esp/#devicename#/system/gatewayip							renvoie l'adresse ip de la passerelle
+			esp/#devicename#/system/subnetmask							renvoie le masque de sous reseau
+			esp/#devicename#/system/ipaddress							renvoie l'adresse ip du device
+			esp/#devicename#/system/macaddress							renvoie l'adresse mac du device
+
+
+	Topics MQTT pour Lampe :
+		Parametres :
+			NightModeDim												0 à 255    defini le DIM appliqué en mode Nuit
+			NoDim 	 													TRUE/FALSE Definir le droit ou non d'utiliser la variation sur un subdevice
+			MinDim  													Definir le taux minimum de dim
+			MaxDim  													Definir le taux maximum de dim
+			DimmerPresets												Definir les valeurs prédéfinies de dimmer
+			TimedValue													Definir le temps d'allumage d'une sortie en mode "Timed"
+
+		esp/#devicename#/setNightMode	     							ON ou OFF passe en mode "nuit" (luminosité faible/normale)
+		esp/#devicename#/setPower/#subdevicenumber#						ON, OFF, TOGGLE, allume ou eteint la lampe, au dernier taux utilisé
+																		Si TOGGLE (ou payload vide), varie de OFF à ON (et inversement) jusqu'au taux précédemment utilisé
+		esp/#devicename#/setTimed/#subdevicenumber#				 		ON, OFF, TOGGLE (ou payload vide) : allume pour le temps défini
+		esp/#devicename#/dimDelay/#subdevicenumber# 					duree de la variation en secondes (ex. 3)
+		esp/#devicename#/setBrightness/#subdevicenumber# 				passe la luminosité à une valeur définie (ex. 240 sur 255)
+		esp/#devicename#/setNextPreset/#subdevicenumber# 				passe la luminosité à la prochaine valeur prédéfinie
+		esp/#devicename#/brightnessState/#subdevicenumber#				renvoie la luminosité du subdevice apres changement d'etat (valeur de 0 a 255)
+		esp/#devicename#/powerState/#subdevicenumber#					le device y publie sa valeur apres changement d'état (on ou off)
+
+	Topics MQTT pour Relais:
+		Parametres :
+			TimedValue													Definir le temps d'allumage d'une sortie en mode "Timed"
+		esp/#devicename#/setPower/#subdevicenumber#  				 		ON, OFF, TOGGLE (ou payload vide)
+		esp/#devicename#/setTimed/#subdevicenumber#				 		ON, OFF, TOGGLE (ou payload vide) : allume pour le temps défini
+		esp/#devicename#/setTimerValue/#subdevicenumber#				Definir un nouveau timer (non sauvegardé)
+		esp/#devicename#/state/#subdevicenumber#				 		le device y publie sa valeur apres changement d'état
+																 		on, off
+
+	Topics MQTT pour Volet:
+		Parametres (pour chaque volet):
+			OpenTimer 			 Definir le temps (en secondes) d'ouvertur et de fermeture
+			CloseTimer
+
+		MQTT :
+		esp/#devicename#/#subdevicenumber#/set  				 OPEN, CLOSE, STOP, TOGGLE (en majuscule)
+																 TOGGLE (ou payload vide): lance l'action inverse à la précédente : si le volet était fermé, alors on ouvre, etc... Si en mouvement, on arrete le volet
+		esp/#devicename#/#subdevicenumber#/state				 le device y publie sa valeur apres changement d'état
+																 open, closed (en minuscule)

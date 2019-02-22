@@ -1,0 +1,3 @@
+(sym_lib_table
+  (lib (name esp8266)(type Legacy)(uri /home/ulle0009/Nextcloud/electronique/PROJETS/KicadDomo/Librairies/esp8266.lib)(options "")(descr ""))
+)

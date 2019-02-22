@@ -1,0 +1,4 @@
+(sym_lib_table
+  (lib (name FilPilote-rescue)(type Legacy)(uri ${KIPRJMOD}/FilPilote-rescue.lib)(options "")(descr ""))
+  (lib (name MyLibs)(type Legacy)(uri ${KIPRJMOD}/myLibrary.lib)(options "")(descr ""))
+)

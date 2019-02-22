@@ -1,0 +1,521 @@
+EESchema Schematic File Version 4
+LIBS:LedDimmer_ESP8266-cache
+EELAYER 26 0
+EELAYER END
+$Descr A4 11693 8268
+encoding utf-8
+Sheet 1 1
+Title ""
+Date ""
+Rev ""
+Comp ""
+Comment1 ""
+Comment2 ""
+Comment3 ""
+Comment4 ""
+$EndDescr
+$Comp
+L LedDimmer_ESP8266-rescue:ESP-12E U2
+U 1 1 5BA3A8F3
+P 5650 3500
+F 0 "U2" H 5650 4050 60  0000 C CNN
+F 1 "ESP-12E" H 5650 2950 60  0000 C CNN
+F 2 "esp8266:ESP-12" H 5650 3500 60  0001 C CNN
+F 3 "" H 5650 3500 60  0000 C CNN
+	1    5650 3500
+	1    0    0    -1  
+$EndComp
+$Comp
+L LedDimmer_ESP8266-rescue:CONN_01X02 5VIN1
+U 1 1 5BA3A9AA
+P 1500 1050
+F 0 "5VIN1" H 1500 1200 50  0000 C CNN
+F 1 "CONN_01X02" H 1500 900 50  0000 C CNN
+F 2 "Connect:bornier2" H 1500 1050 50  0001 C CNN
+F 3 "" H 1500 1050 50  0000 C CNN
+	1    1500 1050
+	-1   0    0    -1  
+$EndComp
+$Comp
+L LedDimmer_ESP8266-rescue:CONN_01X02 BT1
+U 1 1 5BA3AAF8
+P 1550 2050
+F 0 "BT1" H 1550 2200 50  0000 C CNN
+F 1 "CONN_01X02" H 1550 1900 50  0000 C CNN
+F 2 "Connect:bornier2" H 1550 2050 50  0001 C CNN
+F 3 "" H 1550 2050 50  0000 C CNN
+	1    1550 2050
+	-1   0    0    -1  
+$EndComp
+$Comp
+L LedDimmer_ESP8266-rescue:CONN_01X02 BT2
+U 1 1 5BA3ABCE
+P 1550 2800
+F 0 "BT2" H 1550 2950 50  0000 C CNN
+F 1 "CONN_01X02" H 1550 2650 50  0000 C CNN
+F 2 "Connect:bornier2" H 1550 2800 50  0001 C CNN
+F 3 "" H 1550 2800 50  0000 C CNN
+	1    1550 2800
+	-1   0    0    -1  
+$EndComp
+$Comp
+L LedDimmer_ESP8266-rescue:CONN_01X02 LED_BT1
+U 1 1 5BA3AC70
+P 1550 3450
+F 0 "LED_BT1" H 1550 3600 50  0000 C CNN
+F 1 "CONN_01X02" H 1550 3300 50  0000 C CNN
+F 2 "Connect:bornier2" H 1550 3450 50  0001 C CNN
+F 3 "" H 1550 3450 50  0000 C CNN
+	1    1550 3450
+	-1   0    0    -1  
+$EndComp
+$Comp
+L LedDimmer_ESP8266-rescue:CONN_01X02 LED_BT2
+U 1 1 5BA3ACE7
+P 1550 3950
+F 0 "LED_BT2" H 1550 4100 50  0000 C CNN
+F 1 "CONN_01X02" H 1550 3800 50  0000 C CNN
+F 2 "Connect:bornier2" H 1550 3950 50  0001 C CNN
+F 3 "" H 1550 3950 50  0000 C CNN
+	1    1550 3950
+	-1   0    0    -1  
+$EndComp
+$Comp
+L LedDimmer_ESP8266-rescue:CONN_01X03 LED_STRIP_1
+U 1 1 5BA3AFD7
+P 9750 1850
+F 0 "LED_STRIP_1" H 9750 2050 50  0000 C CNN
+F 1 "CONN_01X03" H 9750 1650 50  0000 C CNN
+F 2 "Connect:bornier3" H 9750 1850 50  0001 C CNN
+F 3 "" H 9750 1850 50  0000 C CNN
+	1    9750 1850
+	1    0    0    -1  
+$EndComp
+$Comp
+L LedDimmer_ESP8266-rescue:CONN_01X03 LED_STRIP_2
+U 1 1 5BA3B03F
+P 9800 2800
+F 0 "LED_STRIP_2" H 9800 3000 50  0000 C CNN
+F 1 "CONN_01X03" H 9800 2600 50  0000 C CNN
+F 2 "Connect:bornier3" H 9800 2800 50  0001 C CNN
+F 3 "" H 9800 2800 50  0000 C CNN
+	1    9800 2800
+	1    0    0    -1  
+$EndComp
+$Comp
+L LedDimmer_ESP8266-rescue:AP1117D33 U1
+U 1 1 5BA3B1F7
+P 3700 1000
+F 0 "U1" H 3800 750 50  0000 C CNN
+F 1 "AP1117D33" H 3700 1250 50  0000 C CNN
+F 2 "TO_SOT_Packages_SMD:SOT-223" H 3700 1000 50  0001 C CNN
+F 3 "" H 3700 1000 50  0000 C CNN
+	1    3700 1000
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	1700 1000 3400 1000
+Wire Wire Line
+	1700 1100 2400 1100
+Wire Wire Line
+	2400 1100 2400 1450
+Wire Wire Line
+	2400 1450 3700 1450
+Wire Wire Line
+	3700 1450 3700 1300
+Connection ~ 3700 1450
+Wire Wire Line
+	4000 1000 4600 1000
+Text Label 4450 1000 0    60   ~ 0
+3V3
+Text Label 4400 1450 0    60   ~ 0
+GND
+Text Label 2150 1000 0    60   ~ 0
+5VIN
+Wire Wire Line
+	9550 1750 9100 1750
+Wire Wire Line
+	9550 1950 9100 1950
+Wire Wire Line
+	9550 1850 9100 1850
+Text Label 9100 1750 0    60   ~ 0
+5VIN
+Text Label 9100 1950 0    60   ~ 0
+GND
+Text Label 9100 1850 0    60   ~ 0
+OUT1
+Wire Wire Line
+	9100 2700 9600 2700
+Wire Wire Line
+	9100 2800 9600 2800
+Wire Wire Line
+	9100 2900 9600 2900
+Text Label 9100 2700 0    60   ~ 0
+5VIN
+Text Label 9100 2800 0    60   ~ 0
+OUT2
+Text Label 9100 2900 0    60   ~ 0
+GND
+$Comp
+L LedDimmer_ESP8266-rescue:R_Small R1
+U 1 1 5BA3B4BA
+P 2050 1850
+F 0 "R1" H 2080 1870 50  0000 L CNN
+F 1 "10k" H 2080 1810 50  0000 L CNN
+F 2 "Resistor_SMD:R_0805_2012Metric_Pad1.15x1.40mm_HandSolder" H 2050 1850 50  0001 C CNN
+F 3 "" H 2050 1850 50  0000 C CNN
+	1    2050 1850
+	1    0    0    -1  
+$EndComp
+$Comp
+L LedDimmer_ESP8266-rescue:R_Small R2
+U 1 1 5BA3B543
+P 2050 2600
+F 0 "R2" H 2080 2620 50  0000 L CNN
+F 1 "10k" H 2080 2560 50  0000 L CNN
+F 2 "Resistor_SMD:R_0805_2012Metric_Pad1.15x1.40mm_HandSolder" H 2050 2600 50  0001 C CNN
+F 3 "" H 2050 2600 50  0000 C CNN
+	1    2050 2600
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	1750 2000 2050 2000
+Wire Wire Line
+	2050 1950 2050 2000
+Connection ~ 2050 2000
+Wire Wire Line
+	2050 1750 2050 1650
+Wire Wire Line
+	2050 1650 1800 1650
+Text Label 1800 1650 0    60   ~ 0
+3V3
+Wire Wire Line
+	1800 2400 2050 2400
+Wire Wire Line
+	2050 2400 2050 2500
+Wire Wire Line
+	1750 2750 2050 2750
+Wire Wire Line
+	2050 2750 2050 2700
+Connection ~ 2050 2750
+Text Label 1800 2400 0    60   ~ 0
+3V3
+Text Label 2400 2000 0    60   ~ 0
+BTN1
+Text Label 2400 2750 0    60   ~ 0
+BTN2
+Wire Wire Line
+	1750 2100 2600 2100
+Wire Wire Line
+	2600 2850 1750 2850
+Text Label 2400 2100 0    60   ~ 0
+GND
+Text Label 2400 2850 0    60   ~ 0
+GND
+Wire Wire Line
+	4450 3150 4350 3150
+Wire Wire Line
+	4450 3350 4200 3350
+Wire Wire Line
+	4200 2650 4200 3350
+Connection ~ 4200 3850
+Connection ~ 4200 3350
+Wire Wire Line
+	4200 3850 4450 3850
+Text Label 5500 2650 0    60   ~ 0
+3V3
+Wire Wire Line
+	6850 3850 7200 3850
+Wire Wire Line
+	7200 3750 7200 3850
+Wire Wire Line
+	7200 4350 4200 4350
+Wire Wire Line
+	4200 4350 4200 4200
+Wire Wire Line
+	6850 3750 7200 3750
+Connection ~ 7200 3850
+Text Label 5400 4350 0    60   ~ 0
+GND
+$Comp
+L LedDimmer_ESP8266-rescue:C_Small C1
+U 1 1 5BA3BA04
+P 4200 4100
+F 0 "C1" H 4210 4170 50  0000 L CNN
+F 1 "100nF" H 4210 4020 50  0000 L CNN
+F 2 "Capacitors_SMD:C_0805" H 4200 4100 50  0001 C CNN
+F 3 "" H 4200 4100 50  0000 C CNN
+	1    4200 4100
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	1750 3500 2400 3500
+Wire Wire Line
+	1750 4000 2400 4000
+Wire Wire Line
+	7100 3450 6850 3450
+Wire Wire Line
+	7100 3350 6850 3350
+Wire Wire Line
+	7100 3250 6850 3250
+Wire Wire Line
+	7100 3150 6850 3150
+Wire Wire Line
+	4250 3550 4450 3550
+Wire Wire Line
+	4250 3650 4450 3650
+Text Label 4250 3550 0    60   ~ 0
+BTN2
+Text Label 4250 3650 0    60   ~ 0
+BTN1
+Wire Wire Line
+	2400 3400 1750 3400
+Wire Wire Line
+	2400 3900 1750 3900
+$Comp
+L LedDimmer_ESP8266-rescue:74LS125 U3
+U 1 1 5BA49A6D
+P 7650 5050
+F 0 "U3" H 7650 5150 50  0000 L BNN
+F 1 "74LS125" H 7700 4900 50  0000 L TNN
+F 2 "Housings_SOIC:SOIC-14_3.9x8.7mm_Pitch1.27mm" H 7650 5050 50  0001 C CNN
+F 3 "" H 7650 5050 50  0000 C CNN
+	1    7650 5050
+	1    0    0    -1  
+$EndComp
+$Comp
+L LedDimmer_ESP8266-rescue:74LS125 U3
+U 2 1 5BA49B6F
+P 7650 5700
+F 0 "U3" H 7650 5800 50  0000 L BNN
+F 1 "74LS125" H 7700 5550 50  0000 L TNN
+F 2 "Housings_SOIC:SOIC-14_3.9x8.7mm_Pitch1.27mm" H 7650 5700 50  0001 C CNN
+F 3 "" H 7650 5700 50  0000 C CNN
+	2    7650 5700
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	8100 5050 8450 5050
+Wire Wire Line
+	8450 5700 8100 5700
+Text Label 8200 5050 0    60   ~ 0
+OUT1
+Text Label 8200 5700 0    60   ~ 0
+OUT2
+Wire Wire Line
+	6950 5050 7200 5050
+Wire Wire Line
+	6900 5700 7200 5700
+Text Label 7000 5050 0    60   ~ 0
+O1
+Text Label 6950 5700 0    60   ~ 0
+O2
+Text Label 6900 3350 0    60   ~ 0
+O1
+Text Label 6900 3450 0    60   ~ 0
+O2
+Wire Wire Line
+	7950 5400 7650 5400
+Wire Wire Line
+	7650 5400 7650 5350
+Wire Wire Line
+	7900 6050 7650 6050
+Wire Wire Line
+	7650 6050 7650 6000
+Text Label 7800 5400 0    60   ~ 0
+GND
+Text Label 7800 6050 0    60   ~ 0
+GND
+$Comp
+L LedDimmer_ESP8266-rescue:ULN2803A IC1
+U 1 1 5BA49F55
+P 4500 5350
+F 0 "IC1" H 4200 5880 50  0000 L BNN
+F 1 "ULN2803A" H 4200 4750 50  0000 L BNN
+F 2 "Housings_SOIC:SOIC-18_7.5x11.6mm_Pitch1.27mm" H 4500 5500 50  0001 C CNN
+F 3 "" H 4500 5350 60  0000 C CNN
+	1    4500 5350
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	5250 5750 5000 5750
+Text Label 5100 5750 0    60   ~ 0
+5VIN
+Wire Wire Line
+	3750 5750 4000 5750
+Text Label 3750 5750 0    60   ~ 0
+GND
+Text Label 6950 3650 0    60   ~ 0
+L1
+Text Label 4300 3750 0    60   ~ 0
+L2
+Text Label 2000 3400 0    60   ~ 0
+5VIN
+Text Label 2000 3900 0    60   ~ 0
+5VIN
+Text Label 2000 3500 0    60   ~ 0
+LED1
+Text Label 2000 4000 0    60   ~ 0
+LED2
+Wire Wire Line
+	5250 4950 5000 4950
+Wire Wire Line
+	5250 5050 5000 5050
+Wire Wire Line
+	3750 4950 4000 4950
+Wire Wire Line
+	3750 5050 4000 5050
+Text Label 5050 4950 0    60   ~ 0
+LED1
+Text Label 5050 5050 0    60   ~ 0
+LED2
+Text Label 3750 4950 0    60   ~ 0
+L1
+Text Label 3750 5050 0    60   ~ 0
+L2
+$Comp
+L LedDimmer_ESP8266-rescue:74LS125 U3
+U 3 1 5BA4A8F1
+P 9650 5050
+F 0 "U3" H 9650 5150 50  0000 L BNN
+F 1 "74LS125" H 9700 4900 50  0000 L TNN
+F 2 "Housings_SOIC:SOIC-14_3.9x8.7mm_Pitch1.27mm" H 9650 5050 50  0001 C CNN
+F 3 "" H 9650 5050 50  0000 C CNN
+	3    9650 5050
+	1    0    0    -1  
+$EndComp
+$Comp
+L LedDimmer_ESP8266-rescue:74LS125 U3
+U 4 1 5BA4A926
+P 9650 5650
+F 0 "U3" H 9650 5750 50  0000 L BNN
+F 1 "74LS125" H 9700 5500 50  0000 L TNN
+F 2 "Housings_SOIC:SOIC-14_3.9x8.7mm_Pitch1.27mm" H 9650 5650 50  0001 C CNN
+F 3 "" H 9650 5650 50  0000 C CNN
+	4    9650 5650
+	1    0    0    -1  
+$EndComp
+Text Label 2750 1000 0    60   ~ 0
+VCC
+Wire Wire Line
+	3700 1450 4600 1450
+Wire Wire Line
+	2050 2000 2600 2000
+Wire Wire Line
+	2050 2750 2600 2750
+Wire Wire Line
+	4200 3850 4200 4000
+Wire Wire Line
+	4200 3350 4200 3850
+Wire Wire Line
+	7200 3850 7200 4350
+$Comp
+L LedDimmer_ESP8266-rescue:R_Small R4
+U 1 1 5BAEF3C7
+P 7350 3350
+F 0 "R4" H 7380 3370 50  0000 L CNN
+F 1 "10k" H 7380 3310 50  0000 L CNN
+F 2 "Resistor_SMD:R_0805_2012Metric_Pad1.15x1.40mm_HandSolder" H 7350 3350 50  0001 C CNN
+F 3 "" H 7350 3350 50  0000 C CNN
+	1    7350 3350
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	6850 3550 7350 3550
+Wire Wire Line
+	7350 2650 7350 3250
+Wire Wire Line
+	7350 3450 7350 3550
+Connection ~ 7350 3550
+Wire Wire Line
+	7350 3550 7950 3550
+Wire Wire Line
+	4200 2650 7350 2650
+$Comp
+L LedDimmer_ESP8266-rescue:R_Small R3
+U 1 1 5BAF53A9
+P 4350 2750
+F 0 "R3" H 4380 2770 50  0000 L CNN
+F 1 "10k" H 4380 2710 50  0000 L CNN
+F 2 "Resistor_SMD:R_0805_2012Metric_Pad1.15x1.40mm_HandSolder" H 4350 2750 50  0001 C CNN
+F 3 "" H 4350 2750 50  0000 C CNN
+	1    4350 2750
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	4350 2850 4350 3150
+Text Label 4350 2900 3    50   ~ 0
+RST
+$Comp
+L Switch:SW_SPST SW2
+U 1 1 5BAF85C2
+P 7950 3750
+F 0 "SW2" V 7904 3848 50  0000 L CNN
+F 1 "FLASH" V 7995 3848 50  0000 L CNN
+F 2 "Button_Switch_SMD:SW_SPST_EVPBF" H 7950 3750 50  0001 C CNN
+F 3 "" H 7950 3750 50  0001 C CNN
+	1    7950 3750
+	0    1    1    0   
+$EndComp
+$Comp
+L Switch:SW_SPST SW1
+U 1 1 5BAF87B0
+P 3700 3400
+F 0 "SW1" V 3654 3312 50  0000 R CNN
+F 1 "RESET" V 3745 3312 50  0000 R CNN
+F 2 "Button_Switch_SMD:SW_SPST_EVPBF" H 3700 3400 50  0001 C CNN
+F 3 "" H 3700 3400 50  0001 C CNN
+	1    3700 3400
+	0    -1   1    0   
+$EndComp
+Wire Wire Line
+	4350 3150 3700 3150
+Wire Wire Line
+	3700 3150 3700 3200
+Connection ~ 4350 3150
+Wire Wire Line
+	3700 3600 3700 4350
+Wire Wire Line
+	3700 4350 4200 4350
+Connection ~ 4200 4350
+Wire Wire Line
+	7950 3950 7950 4350
+Wire Wire Line
+	7950 4350 7200 4350
+Connection ~ 7200 4350
+$Comp
+L Connector:Conn_01x04_Male J1
+U 1 1 5BAFEEE7
+P 6850 1850
+F 0 "J1" H 6822 1823 50  0000 R CNN
+F 1 "ISP" H 6822 1732 50  0000 R CNN
+F 2 "Connector_PinHeader_2.54mm:PinHeader_1x04_P2.54mm_Vertical" H 6850 1850 50  0001 C CNN
+F 3 "~" H 6850 1850 50  0001 C CNN
+	1    6850 1850
+	-1   0    0    -1  
+$EndComp
+Wire Wire Line
+	7100 3650 6850 3650
+Wire Wire Line
+	4300 3750 4450 3750
+Text Label 6900 3150 0    50   ~ 0
+TXD
+Text Label 6900 3250 0    50   ~ 0
+RXD
+Wire Wire Line
+	6300 1750 6650 1750
+Wire Wire Line
+	6300 1850 6650 1850
+Wire Wire Line
+	6300 1950 6650 1950
+Wire Wire Line
+	6300 2050 6650 2050
+Text Label 6400 1750 0    50   ~ 0
+3V3
+Text Label 6400 1850 0    50   ~ 0
+TXD
+Text Label 6400 1950 0    50   ~ 0
+RXD
+Text Label 6400 2050 0    50   ~ 0
+GND
+$EndSCHEMATC

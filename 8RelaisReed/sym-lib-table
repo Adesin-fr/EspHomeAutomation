@@ -1,0 +1,4 @@
+(sym_lib_table
+  (lib (name mySensors_8RelaisReed-rescue)(type Legacy)(uri ${KIPRJMOD}/mySensors_8RelaisReed-rescue.lib)(options "")(descr ""))
+  (lib (name 8RelaisReed-rescue)(type Legacy)(uri ${KIPRJMOD}/8RelaisReed-rescue.lib)(options "")(descr ""))
+)
