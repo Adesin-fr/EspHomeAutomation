@@ -41,7 +41,7 @@ L FilPilote-rescue:R R1
 U 1 1 57E3C9BF
 P 7500 1100
 F 0 "R1" V 7600 1100 50  0000 C CNN
-F 1 "300" V 7400 1100 50  0000 C CNN
+F 1 "270" V 7400 1100 50  0000 C CNN
 F 2 "Resistor_SMD:R_0805_2012Metric_Pad1.15x1.40mm_HandSolder" V 7430 1100 50  0001 C CNN
 F 3 "" H 7500 1100 50  0000 C CNN
 	1    7500 1100
@@ -52,7 +52,7 @@ L FilPilote-rescue:R R2
 U 1 1 57E3CA3C
 P 7500 1650
 F 0 "R2" V 7580 1650 50  0000 C CNN
-F 1 "300" V 7400 1650 50  0000 C CNN
+F 1 "270" V 7400 1650 50  0000 C CNN
 F 2 "Resistor_SMD:R_0805_2012Metric_Pad1.15x1.40mm_HandSolder" V 7430 1650 50  0001 C CNN
 F 3 "" H 7500 1650 50  0000 C CNN
 	1    7500 1650
@@ -64,7 +64,7 @@ U 1 1 57E3CA83
 P 8850 1300
 F 0 "D1" H 8850 1400 50  0000 C CNN
 F 1 "D" H 8850 1200 50  0000 C CNN
-F 2 "Diode_THT:D_DO-41_SOD81_P7.62mm_Horizontal" H 8850 1300 50  0001 C CNN
+F 2 "Diode_SMD:D_SOD-123" H 8850 1300 50  0001 C CNN
 F 3 "" H 8850 1300 50  0000 C CNN
 	1    8850 1300
 	-1   0    0    1   
@@ -75,7 +75,7 @@ U 1 1 57E3CAE4
 P 8850 1850
 F 0 "D2" H 8850 1950 50  0000 C CNN
 F 1 "D" H 8850 1750 50  0000 C CNN
-F 2 "Diode_THT:D_DO-41_SOD81_P7.62mm_Horizontal" H 8850 1850 50  0001 C CNN
+F 2 "Diode_SMD:D_SOD-123" H 8850 1850 50  0001 C CNN
 F 3 "" H 8850 1850 50  0000 C CNN
 	1    8850 1850
 	1    0    0    -1  
@@ -136,80 +136,32 @@ Wire Wire Line
 Wire Wire Line
 	7100 1650 7350 1650
 Wire Wire Line
-	8800 4650 8500 4650
+	1600 3000 1300 3000
 Wire Wire Line
-	8800 4900 8500 4900
-Text Label 8500 4900 0    60   ~ 0
+	1600 3250 1300 3250
+Text Label 1300 3250 0    60   ~ 0
 NEUTRE
-Text Label 8500 4650 0    60   ~ 0
+Text Label 1300 3000 0    60   ~ 0
 PH_IN
 $Comp
 L FilPilote-rescue:HLK-PM01 U5
 U 1 1 57E3D6E0
-P 9450 4800
-F 0 "U5" H 9250 4600 60  0000 C CNN
-F 1 "HLK-PM01" H 9400 5050 60  0000 C CNN
-F 2 "MyLibrary.pretty:HLK-PM01" H 9450 4800 60  0001 C CNN
-F 3 "" H 9450 4800 60  0000 C CNN
-	1    9450 4800
+P 2250 3150
+F 0 "U5" H 2050 2950 60  0000 C CNN
+F 1 "HLK-PM03" H 2200 3400 60  0000 C CNN
+F 2 "MyLibrary.pretty:HLK-PM01" H 2250 3150 60  0001 C CNN
+F 3 "" H 2250 3150 60  0000 C CNN
+	1    2250 3150
 	1    0    0    -1  
 $EndComp
-Wire Wire Line
-	10100 4600 10400 4600
-Wire Wire Line
-	10100 4950 10400 4950
-Text Label 10200 4600 0    60   ~ 0
+Text Label 3000 2950 0    60   ~ 0
 GND
-Text Label 10200 4950 0    60   ~ 0
-VCC
-Wire Wire Line
-	9000 5750 8850 5750
-Wire Wire Line
-	9300 6000 9300 6250
-Text Label 9500 6250 0    60   ~ 0
-GND
-Text Label 9800 5750 0    60   ~ 0
+Text Label 3000 3300 0    60   ~ 0
 3V3
-Text Label 8700 5750 0    60   ~ 0
-VCC
-$Comp
-L FilPilote-rescue:C C3
-U 1 1 57E3DA4C
-P 10250 6000
-F 0 "C3" H 10275 6100 50  0000 L CNN
-F 1 "10u" H 10275 5900 50  0000 L CNN
-F 2 "Capacitor_SMD:C_1206_3216Metric_Pad1.42x1.75mm_HandSolder" H 10288 5850 50  0001 C CNN
-F 3 "" H 10250 6000 50  0000 C CNN
-	1    10250 6000
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	10250 6150 10250 6250
-Wire Wire Line
-	10250 5850 10250 5750
-Wire Wire Line
-	10250 6250 9300 6250
-Wire Wire Line
-	10250 5750 9600 5750
-$Comp
-L FilPilote-rescue:AMS1117 U3
-U 1 1 5875E219
-P 9400 5750
-F 0 "U3" H 9500 5500 50  0000 R BNN
-F 1 "AMS1117" H 9300 6000 50  0000 C TNN
-F 2 "Package_TO_SOT_SMD:SOT-223-3_TabPin2" H 9300 5800 60  0001 C CNN
-F 3 "" H 9300 5800 60  0000 C CNN
-	1    9400 5750
-	1    0    0    -1  
-$EndComp
 Wire Wire Line
 	9350 1100 9350 1650
 Wire Wire Line
 	9100 1300 9000 1300
-Text Label 7100 1100 0    50   ~ 0
-3V3
-Text Label 7100 1650 0    50   ~ 0
-3V3
 $Comp
 L RF_Module:ESP-12E U4
 U 1 1 5C59836E
@@ -219,28 +171,6 @@ F 1 "ESP-12E" H 2950 2687 50  0000 C CNN
 F 2 "RF_Module:ESP-12E" H 2950 1800 50  0001 C CNN
 F 3 "http://wiki.ai-thinker.com/_media/esp8266/esp8266_series_modules_user_manual_v1.1.pdf" H 2600 1900 50  0001 C CNN
 	1    2950 1800
-	1    0    0    -1  
-$EndComp
-$Comp
-L Device:Q_NMOS_DGS Q1
-U 1 1 5C598465
-P 5200 3350
-F 0 "Q1" H 5405 3396 50  0000 L CNN
-F 1 "AO3400" H 5405 3305 50  0000 L CNN
-F 2 "Package_TO_SOT_SMD:SOT-23" H 5400 3450 50  0001 C CNN
-F 3 "~" H 5200 3350 50  0001 C CNN
-	1    5200 3350
-	1    0    0    -1  
-$EndComp
-$Comp
-L Device:Q_NMOS_DGS Q2
-U 1 1 5C59850B
-P 6150 3950
-F 0 "Q2" H 6355 3996 50  0000 L CNN
-F 1 "AO3400" H 6355 3905 50  0000 L CNN
-F 2 "Package_TO_SOT_SMD:SOT-23" H 6350 4050 50  0001 C CNN
-F 3 "~" H 6150 3950 50  0001 C CNN
-	1    6150 3950
 	1    0    0    -1  
 $EndComp
 $Comp
@@ -254,102 +184,6 @@ F 3 "~" H 5150 2350 50  0001 C CNN
 	1    5150 2350
 	-1   0    0    -1  
 $EndComp
-$Comp
-L Device:R_Small R3
-U 1 1 5C59885E
-P 4800 3350
-F 0 "R3" V 4604 3350 50  0000 C CNN
-F 1 "100" V 4695 3350 50  0000 C CNN
-F 2 "Resistor_SMD:R_0805_2012Metric_Pad1.15x1.40mm_HandSolder" H 4800 3350 50  0001 C CNN
-F 3 "~" H 4800 3350 50  0001 C CNN
-	1    4800 3350
-	0    1    1    0   
-$EndComp
-$Comp
-L Device:R_Small R5
-U 1 1 5C598926
-P 5750 3950
-F 0 "R5" V 5554 3950 50  0000 C CNN
-F 1 "100" V 5645 3950 50  0000 C CNN
-F 2 "Resistor_SMD:R_0805_2012Metric_Pad1.15x1.40mm_HandSolder" H 5750 3950 50  0001 C CNN
-F 3 "~" H 5750 3950 50  0001 C CNN
-	1    5750 3950
-	0    1    1    0   
-$EndComp
-$Comp
-L Device:R_Small R4
-U 1 1 5C5989C4
-P 4950 3500
-F 0 "R4" H 5100 3450 50  0000 R CNN
-F 1 "1M" H 5100 3550 50  0000 R CNN
-F 2 "Resistor_SMD:R_0805_2012Metric_Pad1.15x1.40mm_HandSolder" H 4950 3500 50  0001 C CNN
-F 3 "~" H 4950 3500 50  0001 C CNN
-	1    4950 3500
-	-1   0    0    1   
-$EndComp
-$Comp
-L Device:R_Small R6
-U 1 1 5C598AAA
-P 5900 4100
-F 0 "R6" H 6050 4050 50  0000 R CNN
-F 1 "1M" H 6050 4150 50  0000 R CNN
-F 2 "Resistor_SMD:R_0805_2012Metric_Pad1.15x1.40mm_HandSolder" H 5900 4100 50  0001 C CNN
-F 3 "~" H 5900 4100 50  0001 C CNN
-	1    5900 4100
-	-1   0    0    1   
-$EndComp
-Text Label 7100 1300 0    50   ~ 0
-O1
-Text Label 7100 1850 0    50   ~ 0
-O2
-Wire Wire Line
-	6250 3750 6250 3650
-Wire Wire Line
-	6250 3650 6500 3650
-Wire Wire Line
-	5300 3150 5300 3050
-Wire Wire Line
-	5300 3050 5650 3050
-Wire Wire Line
-	6250 4150 6250 4250
-Wire Wire Line
-	6250 4250 5900 4250
-Wire Wire Line
-	5900 4200 5900 4250
-Connection ~ 5900 4250
-Wire Wire Line
-	5900 4250 5500 4250
-Wire Wire Line
-	5850 3950 5900 3950
-Wire Wire Line
-	5900 3950 5900 4000
-Connection ~ 5900 3950
-Wire Wire Line
-	5900 3950 5950 3950
-Wire Wire Line
-	5650 3950 5500 3950
-Wire Wire Line
-	5300 3550 5300 3650
-Wire Wire Line
-	5300 3650 4950 3650
-Wire Wire Line
-	4950 3600 4950 3650
-Connection ~ 4950 3650
-Wire Wire Line
-	4950 3650 4550 3650
-Wire Wire Line
-	4900 3350 4950 3350
-Wire Wire Line
-	4950 3350 4950 3400
-Connection ~ 4950 3350
-Wire Wire Line
-	4950 3350 5000 3350
-Wire Wire Line
-	4700 3350 4550 3350
-Text Label 5450 3050 0    50   ~ 0
-O1
-Text Label 6350 3650 0    50   ~ 0
-O2
 $Comp
 L Switch:SW_DPST SW1
 U 1 1 5C5A060A
@@ -501,38 +335,34 @@ Wire Wire Line
 Wire Wire Line
 	3800 1900 3550 1900
 Text Label 3600 1800 0    50   ~ 0
-S_OP1
+O1
 Text Label 3600 1900 0    50   ~ 0
-S_OP2
+O2
+Text Label 4700 2550 0    50   ~ 0
+GND
+Text Label 7100 1100 0    50   ~ 0
+O1
+Text Label 7100 1300 0    50   ~ 0
+GND
+Text Label 7100 1650 0    50   ~ 0
+O2
+Text Label 7100 1850 0    50   ~ 0
+GND
 $Comp
-L FilPilote-rescue:C C1
-U 1 1 5C5D3558
-P 8850 6000
-F 0 "C1" H 8875 6100 50  0000 L CNN
-F 1 "10u" H 8875 5900 50  0000 L CNN
-F 2 "Capacitor_SMD:C_1206_3216Metric_Pad1.42x1.75mm_HandSolder" H 8888 5850 50  0001 C CNN
-F 3 "" H 8850 6000 50  0000 C CNN
-	1    8850 6000
+L FilPilote-rescue:C C3
+U 1 1 57E3DA4C
+P 3550 3100
+F 0 "C3" H 3575 3200 50  0000 L CNN
+F 1 "100nF" H 3575 3000 50  0000 L CNN
+F 2 "Capacitor_SMD:C_1206_3216Metric_Pad1.42x1.75mm_HandSolder" H 3588 2950 50  0001 C CNN
+F 3 "" H 3550 3100 50  0000 C CNN
+	1    3550 3100
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	8850 5850 8850 5750
-Connection ~ 8850 5750
+	2900 2950 3550 2950
 Wire Wire Line
-	8850 5750 8550 5750
+	3550 3250 3550 3300
 Wire Wire Line
-	8850 6150 8850 6250
-Wire Wire Line
-	8850 6250 9300 6250
-Connection ~ 9300 6250
-Text Label 4550 3350 0    50   ~ 0
-S_OP1
-Text Label 5500 3950 0    50   ~ 0
-S_OP2
-Text Label 5500 4250 0    50   ~ 0
-GND
-Text Label 4550 3650 0    50   ~ 0
-GND
-Text Label 4700 2550 0    50   ~ 0
-GND
+	2900 3300 3550 3300
 $EndSCHEMATC
