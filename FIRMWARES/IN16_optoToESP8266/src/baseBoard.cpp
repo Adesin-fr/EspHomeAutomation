@@ -1,21 +1,21 @@
 #include "baseBoard.h"
 #include "customBoard.h"
 
-    String baseTopic;
-    boolean mqttConnected=false;
-    String mqttServer;
-    unsigned int mqttPort;
-    unsigned int webServerPort;
-    unsigned int MQTT_NUM_TRIES;      // How many times should we try to connect to mqtt broker ?
-    boolean SPIFFSAvailable=false;
-    boolean needReboot=false;
-    WiFiClient espClient;
-    PubSubClient myMqtt(espClient);
-    String myHostName;
-    ESP8266WebServer server(8000);
-    EspSaveCrash SaveCrash;                   // Save crashes informations to EEPROM to retrieve later !
-    WiFiManager wifiManager;
-    ESP8266HTTPUpdateServer httpUpdater(true);      // Web updater
+String baseTopic;
+boolean mqttConnected=false;
+String mqttServer;
+unsigned int mqttPort;
+unsigned int webServerPort;
+unsigned int MQTT_NUM_TRIES;      // How many times should we try to connect to mqtt broker ?
+boolean SPIFFSAvailable=false;
+boolean needReboot=false;
+WiFiClient espClient;
+PubSubClient myMqtt(espClient);
+String myHostName;
+ESP8266WebServer server(8000);
+EspSaveCrash SaveCrash;                   // Save crashes informations to EEPROM to retrieve later !
+WiFiManager wifiManager;
+ESP8266HTTPUpdateServer httpUpdater(true);      // Web updater
 
 
 void blink(){
@@ -306,6 +306,9 @@ void baseSetup(){
                 myHostName="newESP";
             }
 
+            WiFi.hostname(myHostName.c_str());
+
+
             if (SPIFFSAvailable){
                 if (!SPIFFS.exists("/inputSettings.dat")){
                     File ftouch = SPIFFS.open("/inputSettings.dat","w");
@@ -420,7 +423,7 @@ void baseSetup(){
             server.on("/advSettings", handleAdvancedSettings);
             server.on("/resetWifi", handleResetWifi);
 
-            //ArduinoOTA.begin();
+            // Updater page :
             httpUpdater.setup(&server);
 
             // Start the server
@@ -432,7 +435,6 @@ void baseSetup(){
                 Serial.print(":");
                 Serial.println(webServerPort);
             #endif
-
 }
 
 void baseLoop(){
@@ -447,20 +449,16 @@ void baseLoop(){
     // Handle http client requests:
     server.handleClient();
 
-    ArduinoOTA.handle();
-
-
     // Handle MQTT incoming messages :
     if (mqttConnected){
         myMqtt.loop();
     }
 
-      unsigned long diff = millis() - previousTime;
-
-      if(diff > (mqttReportInterval*1000)) {
-          mqttReport();
-          previousTime = millis();
-      }
-
+    // Should we post a mqtt report ?
+    unsigned long diff = millis() - previousTime;
+    if(diff > (mqttReportInterval*1000)) {
+        mqttReport();
+        previousTime = millis();
+    }
 
 }

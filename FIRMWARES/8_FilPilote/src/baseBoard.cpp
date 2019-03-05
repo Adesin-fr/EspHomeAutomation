@@ -1,21 +1,21 @@
 #include "baseBoard.h"
 #include "customBoard.h"
 
-  String baseTopic;
-  boolean mqttConnected=false;
-  String mqttServer;
-  unsigned int mqttPort;
-  unsigned int webServerPort;
-  unsigned int MQTT_NUM_TRIES;      // How many times should we try to connect to mqtt broker ?
-  boolean SPIFFSAvailable=false;
-  boolean needReboot=false;
-  WiFiClient espClient;
-  PubSubClient myMqtt(espClient);
-  String myHostName;
-  ESP8266WebServer server(webServerPort);
-  EspSaveCrash SaveCrash;                   // Save crashes informations to EEPROM to retrieve later !
-  ESP8266HTTPUpdateServer httpUpdater;
-  WiFiManager wifiManager;
+String baseTopic;
+boolean mqttConnected=false;
+String mqttServer;
+unsigned int mqttPort;
+unsigned int webServerPort;
+unsigned int MQTT_NUM_TRIES;      // How many times should we try to connect to mqtt broker ?
+boolean SPIFFSAvailable=false;
+boolean needReboot=false;
+WiFiClient espClient;
+PubSubClient myMqtt(espClient);
+String myHostName;
+ESP8266WebServer server(webServerPort);
+EspSaveCrash SaveCrash;                   // Save crashes informations to EEPROM to retrieve later !
+ESP8266HTTPUpdateServer httpUpdater;
+WiFiManager wifiManager;
 
 
 void blink(){
@@ -34,189 +34,191 @@ void handleResetWifi(){
 
 
 void handleReboot() {
-          blink();
-          String output="";
+    blink();
+    String output="";
 
-          output += "<div align='center'><h1>Rebooting, please wait...</h1></div>";
-          output += "<script>setTimeout(function(){window.location.href='/advSettings';},5000);</script>";  // Reload after 5 seconds
+    output += "<div align='center'><h1>Rebooting, please wait...</h1></div>";
+    output += "<script>setTimeout(function(){window.location.href='/advSettings';},5000);</script>";  // Reload after 5 seconds
 
-          server.send(200, "text/html", output);
-          delay(1000);
+    server.send(200, "text/html", output);
+    delay(1000);
 
-          ESP.restart();
-      }
+    ESP.restart();
+}
 
 
 void handleSettingChange(){
-          String arg;
-          String fileName;
+    String arg;
+    String fileName;
 
-          if (server.args() == 0) {
-            arg=server.arg(0);
-            fileName=server.argName(0) + ".txt";
-            return server.send(500, "text/plain", "Missing setting name");
-            saveLineToFile(fileName.c_str(), arg.c_str());
-            needReboot = true;
-          }
-          handleAdvancedSettings();
-      }
+    if (server.args() == 1) {
+        arg=server.arg(0);
+        fileName="/" + server.argName(0) + ".txt";
+        saveLineToFile(fileName.c_str(), arg.c_str());
+        needReboot = true;
+    }else{
+    return server.send(500, "text/plain", "There must be only one setting.");
+    }
+    handleAdvancedSettings();
+}
+
 
 
 void handleAdvancedSettings(){
-          blink();
-          String output="";
+    blink();
+    String output="";
 
-          output += "<div align='center'><h1>Advanced Settings</h1></div><br>";
-          output += "<table border=1><th>Setting Name</th><th>Value</th>";
+    output += "<div align='center'><h1>Advanced Settings</h1></div><br>";
+    output += "<table border=1><th>Setting Name</th><th>Value</th>";
 
-          output += "<form action='/setNewSetting'><tr><td>Hostname :</td><td><input name='hostname' value='" + myHostName + "'> <input type=submit value='Change'><td></tr></form>";
-          output += "<form action='/setNewSetting'><tr><td>Web Server Port :</td><td><input name='webServerPort' value='" + String(webServerPort) + "'> <input type=submit value='Change'></td></tr></form>";
-          output += "<form action='/setNewSetting'><tr><td>Mqtt Server ip :</td><td><input name='mqttServer' value='" + mqttServer + "'> <input type=submit value='Change'></td></tr></form>";
-          output += "<form action='/setNewSetting'><tr><td>Mqtt Server Port :</td><td><input name='mqttServerPort' value='" + String(mqttPort) + "'> <input type=submit value='Change'></td></tr></form>";
-          output += "<form action='/setNewSetting'><tr><td>Mqtt Base Topic :</td><td><input name='mqttBaseTopic' value='" + baseTopic + "'> <input type=submit value='Change'></td></tr></form>";
-          output += "<form action='/setNewSetting'><tr><td>Mqtt Connection tries :</td><td><input name='mqttNumTries' value='" + String(MQTT_NUM_TRIES) + "'> <input type=submit value='Change'></td></tr></form>";
+    output += "<form action='/setNewSetting'><tr><td>Hostname :</td><td><input name='hostname' value='" + myHostName + "'> <input type=submit value='Change'><td></tr></form>";
+    output += "<form action='/setNewSetting'><tr><td>Web Server Port :</td><td><input name='webServerPort' value='" + String(webServerPort) + "'> <input type=submit value='Change'></td></tr></form>";
+    output += "<form action='/setNewSetting'><tr><td>Mqtt Server ip :</td><td><input name='mqttServer' value='" + mqttServer + "'> <input type=submit value='Change'></td></tr></form>";
+    output += "<form action='/setNewSetting'><tr><td>Mqtt Server Port :</td><td><input name='mqttServerPort' value='" + String(mqttPort) + "'> <input type=submit value='Change'></td></tr></form>";
+    output += "<form action='/setNewSetting'><tr><td>Mqtt Base Topic :</td><td><input name='mqttBaseTopic' value='" + baseTopic + "'> <input type=submit value='Change'></td></tr></form>";
+    output += "<form action='/setNewSetting'><tr><td>Mqtt Connection tries :</td><td><input name='mqttNumTries' value='" + String(MQTT_NUM_TRIES) + "'> <input type=submit value='Change'></td></tr></form>";
 
-          output += "</table><br>";
-          output += "<form action='/reboot' ><input type=submit value='Reboot'></form><br><br><br>";
-          output += "<a href='/resetWifi'>Reset wifi settings</a><br>";
+    output += "</table><br>";
+    output += "<form action='/reboot' ><input type=submit value='Reboot'></form><br><br><br>";
+    output += "<a href='/resetWifi'>Reset wifi settings</a><br>";
 
-          if (needReboot){
-              output += "<font color='red'><b>Settings has changed, a reboot is needed !</b></font>";
-          }
+    if (needReboot){
+        output += "<font color='red'><b>Settings has changed, a reboot is needed !</b></font>";
+    }
 
-          server.send(200, "text/html", output);
+    server.send(200, "text/html", output);
 
-      }
+}
 
 
 String loadLineFromFile(const char*  fileName,  const char* defaultValue){
-          String fname;
-          String fileData;
+      String fname;
+      String fileData;
 
-          if (fileName[0]!='/'){
-              fname = '/' +  fileName;
-          }else{
-              fname = String(fileName);
-          }
-          if (SPIFFSAvailable){
+      if (fileName[0]!='/'){
+          fname = '/' +  fileName;
+      }else{
+          fname = String(fileName);
+      }
+      if (SPIFFSAvailable){
 
+        #ifdef UseSerial
+          Serial.print("Reading from ");
+          Serial.println(fname);
+        #endif
+        // this opens the file "f.txt" in read-mode
+        File fileread = SPIFFS.open(fname, "r");
+
+        if (!fileread) {
             #ifdef UseSerial
-              Serial.print("Reading from ");
-              Serial.println(fname);
+                Serial.println("File doesn't exist yet. Creating it");
             #endif
-            // this opens the file "f.txt" in read-mode
-            File fileread = SPIFFS.open(fname, "r");
 
+            // open the file in write mode
+            File fileread = SPIFFS.open(fname, "w");
             if (!fileread) {
                 #ifdef UseSerial
-                    Serial.println("File doesn't exist yet. Creating it");
+                    Serial.println("file creation failed");
                 #endif
-
-                // open the file in write mode
-                File fileread = SPIFFS.open(fname, "w");
-                if (!fileread) {
-                    #ifdef UseSerial
-                        Serial.println("file creation failed");
-                    #endif
-                }
-                fileread.print(defaultValue);
-                fileData = defaultValue;
-            } else {
-                // we could open the file
-                while(fileread.available()) {
-                    //open its content
-                    fileData = fileread.readString();
-                }
             }
-            fileread.close();
-          }
-          return fileData;
+            fileread.print(defaultValue);
+            fileData = defaultValue;
+        } else {
+            // we could open the file
+            while(fileread.available()) {
+                //open its content
+                fileData = fileread.readString();
+            }
+        }
+        fileread.close();
       }
+      return fileData;
+}
 
 
 void saveLineToFile(const char* fileName, const char* data){
-          String fname = fileName;
+      String fname = fileName;
 
 
-          if (fileName[0]!='/'){
-              fname = '/' + fileName;
-          }
+      if (fileName[0]!='/'){
+          fname = '/' + fileName;
+      }
 
-          #ifdef UseSerial
-            Serial.print("Saving to ");
-            Serial.println(fname);
-          #endif
+      #ifdef UseSerial
+        Serial.print("Saving to ");
+        Serial.println(fname);
+      #endif
 
-          if (SPIFFSAvailable){
-              File fw = SPIFFS.open(fname, "w");
-              if (!fw) {
-                  #ifdef UseSerial
-                      Serial.println("file creation failed");
-                  #endif
-              }else{
-                  fw.print(data);
-                  fw.close();
-                  #ifdef UseSerial
-                      Serial.println("file closed");
-                  #endif
-              }
+      if (SPIFFSAvailable){
+          File fw = SPIFFS.open(fname, "w");
+          if (!fw) {
+              #ifdef UseSerial
+                  Serial.println("file creation failed");
+              #endif
+          }else{
+              fw.print(data);
+              fw.close();
+              #ifdef UseSerial
+                  Serial.println("file closed");
+              #endif
           }
       }
+}
 
 
 void mqttReport(){
-          String reportTopic="";
-          String payload="";
+      String reportTopic="";
+      String payload="";
 
-          if (mqttConnected){
+      if (mqttConnected){
 
-              /*
-                  Send status report :
-                      esp/#devicename#/system/rssi								// sends device's RSSI in dBm
-                      esp/#devicename#/system/ipaddress							// sends device's IP
-                      esp/#devicename#/system/subnetmask							// sends device's subnet mask
-                      esp/#devicename#/system/gatewayip							// sends device's gateway IP
-                      esp/#devicename#/system/dnsip								// sends device's DNS IP
-                      esp/#devicename#/system/macaddress							// sends device's MAC address
-                 */
+          /*
+              Send status report :
+                  esp/#devicename#/system/rssi								// sends device's RSSI in dBm
+                  esp/#devicename#/system/ipaddress							// sends device's IP
+                  esp/#devicename#/system/subnetmask							// sends device's subnet mask
+                  esp/#devicename#/system/gatewayip							// sends device's gateway IP
+                  esp/#devicename#/system/dnsip								// sends device's DNS IP
+                  esp/#devicename#/system/macaddress							// sends device's MAC address
+             */
 
-               reportTopic = baseTopic + "/system/freeHeap";
-               payload = ESP.getFreeHeap();
-               myMqtt.publish(reportTopic.c_str(), payload.c_str());
+           reportTopic = baseTopic + "/system/freeHeap";
+           payload = ESP.getFreeHeap();
+           myMqtt.publish(reportTopic.c_str(), payload.c_str());
 
-               int uptime = millis()/1000;
-               reportTopic = baseTopic + "/system/uptime";
-               payload = uptime;
-               myMqtt.publish(reportTopic.c_str(), payload.c_str());
+           int uptime = millis()/1000;
+           reportTopic = baseTopic + "/system/uptime";
+           payload = uptime;
+           myMqtt.publish(reportTopic.c_str(), payload.c_str());
 
-              reportTopic = baseTopic + "/system/rssi";
-              payload = WiFi.RSSI();
-              myMqtt.publish(reportTopic.c_str(), payload.c_str());
+          reportTopic = baseTopic + "/system/rssi";
+          payload = WiFi.RSSI();
+          myMqtt.publish(reportTopic.c_str(), payload.c_str());
 
-              reportTopic = baseTopic + "/system/ipaddress";
-              payload = WiFi.localIP().toString();
-              myMqtt.publish(reportTopic.c_str(), payload.c_str());
+          reportTopic = baseTopic + "/system/ipaddress";
+          payload = WiFi.localIP().toString();
+          myMqtt.publish(reportTopic.c_str(), payload.c_str());
 
-              reportTopic = baseTopic + "/system/subnetmask";
-              payload = WiFi.subnetMask().toString();
-              myMqtt.publish(reportTopic.c_str(), payload.c_str());
+          reportTopic = baseTopic + "/system/subnetmask";
+          payload = WiFi.subnetMask().toString();
+          myMqtt.publish(reportTopic.c_str(), payload.c_str());
 
-              reportTopic = baseTopic + "/system/gatewayip";
-              payload = WiFi.gatewayIP().toString();
-              myMqtt.publish(reportTopic.c_str(), payload.c_str());
+          reportTopic = baseTopic + "/system/gatewayip";
+          payload = WiFi.gatewayIP().toString();
+          myMqtt.publish(reportTopic.c_str(), payload.c_str());
 
-              reportTopic = baseTopic + "/system/dnsip";
-              payload = WiFi.dnsIP().toString();
-              myMqtt.publish(reportTopic.c_str(), payload.c_str());
+          reportTopic = baseTopic + "/system/dnsip";
+          payload = WiFi.dnsIP().toString();
+          myMqtt.publish(reportTopic.c_str(), payload.c_str());
 
-              reportTopic = baseTopic + "/system/macaddress";
-              payload = WiFi.macAddress();
-              myMqtt.publish(reportTopic.c_str(), payload.c_str());
+          reportTopic = baseTopic + "/system/macaddress";
+          payload = WiFi.macAddress();
+          myMqtt.publish(reportTopic.c_str(), payload.c_str());
 
-           }
-           blink();
+       }
+       blink();
 
-      }  // End mqttReport
+  }  // End mqttReport
 
 
 void handleHttpRoot(){
@@ -304,6 +306,8 @@ void baseSetup(){
                 myHostName="newESP";
             }
 
+            WiFi.hostname(myHostName.c_str());
+
             if (SPIFFSAvailable){
                 if (!SPIFFS.exists("/inputSettings.dat")){
                     File ftouch = SPIFFS.open("/inputSettings.dat","w");
@@ -318,6 +322,7 @@ void baseSetup(){
               wifiManager.setDebugOutput(false);
             #endif
 
+            wifiManager.setConfigPortalTimeout(300);
             if (!wifiManager.autoConnect("newESP")){
                 #ifdef UseSerial
                     Serial.println("Wifi connection failed! Resetting !");
@@ -377,7 +382,9 @@ void baseSetup(){
 
 
                 // Subscribe to the topic we are interrested in :
-                myMqtt.subscribe(baseTopic.c_str());
+                String subscribedTopic;
+                subscribedTopic = baseTopic + "/#";
+                myMqtt.subscribe(subscribedTopic.c_str());
 
                 // Send crash informations :
                 File fw = SPIFFS.open("/crash.txt", "w");
@@ -418,7 +425,7 @@ void baseSetup(){
                 // Updater page :
                 httpUpdater.setup(&server);
                 // Start the server
-                server.begin();
+                server.begin(webServerPort);
 
                 #ifdef UseSerial
                     Serial.print("Web server started at ");
@@ -440,17 +447,16 @@ void baseLoop(){
     // Handle http client requests:
     server.handleClient();
 
-
     // Handle MQTT incoming messages :
     if (mqttConnected){
         myMqtt.loop();
     }
 
-      unsigned long diff = millis() - previousTime;
-
-      if(diff > (mqttReportInterval*1000)) {
-          mqttReport();
-          previousTime = millis();
-      }
+    // Should we post a mqtt report ?
+    unsigned long diff = millis() - previousTime;
+    if(diff > (mqttReportInterval*1000)) {
+        mqttReport();
+        previousTime = millis();
+    }
 
 }

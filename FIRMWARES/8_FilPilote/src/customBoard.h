@@ -16,11 +16,22 @@
 
 // Board specific variables :
 
+    enum OrdreFilPilote {
+              Ordre_Confort,
+              Ordre_Confort_1,
+              Ordre_Confort_2,
+              Ordre_Eco,
+              Ordre_HorsGel,
+              Ordre_Arret
+          };
+
       extern      unsigned long previousTime ;
-      extern      byte outputState;
+      extern      int outputState;
       extern      String lastEvents;
-      extern      int outputTimer[SUBNODECOUNT];    // Timer in SECONDS for each output
+      extern      unsigned long outputTimer[SUBNODECOUNT];    // First Timer in SECONDS for each output
       extern      unsigned long outputStartedMillis[SUBNODECOUNT];    // Timer in SECONDS for each output
+      extern      OrdreFilPilote outputStateKeeper[SUBNODECOUNT];     // Keep track of the output state.
+
 
 /*  Board specific MANDATORY functions :
     These functions must be implemented :
@@ -38,7 +49,8 @@
 
       // Board specific custom functions :
 
-            void setOutput(byte numPin, boolean newValue);
+            void flushOutput();
+            void setOutput(byte numPin, OrdreFilPilote newValue);
             void reportOutputState(byte numPin);
 
 
