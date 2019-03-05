@@ -101,7 +101,7 @@ boolean lirePin(byte numPin){
         pos=lastEvents.indexOf('\n');
         lastEvents = lastEvents.substring(pos);
     }
-    lastEvents += "Input " + String(numpin) + ", Action " + payload + "\n";
+    lastEvents += "Input " + String(numpin) + ", Action " + payload + "<br>\n";
 
     // Check for settings :
 

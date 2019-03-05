@@ -51,12 +51,13 @@ void handleSettingChange(){
           String arg;
           String fileName;
 
-          if (server.args() == 0) {
+          if (server.args() == 1) {
             arg=server.arg(0);
-            fileName=server.argName(0) + ".txt";
-            return server.send(500, "text/plain", "Missing setting name");
+            fileName="/" + server.argName(0) + ".txt";
             saveLineToFile(fileName.c_str(), arg.c_str());
             needReboot = true;
+          }else{
+            return server.send(500, "text/plain", "There must be only one setting.");
           }
           handleAdvancedSettings();
       }
@@ -69,7 +70,7 @@ void handleAdvancedSettings(){
           output += "<div align='center'><h1>Advanced Settings</h1></div><br>";
           output += "<table border=1><th>Setting Name</th><th>Value</th>";
 
-          output += "<form action='/setNewSetting'><tr><td>Hostname :</td><td><input name='hostname' value='" + myHostName + "'> <input type=submit value='Change'><td></tr></form>";
+          output += "<form action='/setNewSetting'><tr><td>Hostname :</td><td><input name='hostname' value='" + myHostName + "'> <input type=submit value='Change'></td></tr></form>";
           output += "<form action='/setNewSetting'><tr><td>Web Server Port :</td><td><input name='webServerPort' value='" + String(webServerPort) + "'> <input type=submit value='Change'></td></tr></form>";
           output += "<form action='/setNewSetting'><tr><td>Mqtt Server ip :</td><td><input name='mqttServer' value='" + mqttServer + "'> <input type=submit value='Change'></td></tr></form>";
           output += "<form action='/setNewSetting'><tr><td>Mqtt Server Port :</td><td><input name='mqttServerPort' value='" + String(mqttPort) + "'> <input type=submit value='Change'></td></tr></form>";
@@ -79,6 +80,7 @@ void handleAdvancedSettings(){
           output += "</table><br>";
           output += "<form action='/reboot' ><input type=submit value='Reboot'></form><br><br><br>";
           output += "<a href='/resetWifi'>Reset wifi settings</a><br>";
+          output += "<br><a href='/update'>Update firmware</a><br>";
 
           if (needReboot){
               output += "<font color='red'><b>Settings has changed, a reboot is needed !</b></font>";
@@ -284,7 +286,7 @@ void baseSetup(){
                 #endif
                 // Read settings from files :
                 myHostName = loadStringFromFile("/hostname.txt", "newESP");
-                mqttServer = loadStringFromFile("/mqttServer.txt", "192.168.8.1");
+                mqttServer = loadStringFromFile("/mqttServer.txt", "192.168.0.88");
                 webServerPort = atoi(loadStringFromFile("/webServerPort.txt", "8000").c_str());
                 mqttPort =  atoi(loadStringFromFile("/mqttServerPort.txt", "1883").c_str());
                 MQTT_NUM_TRIES =  atoi(loadStringFromFile("/mqttNumTries.txt", "5").c_str());
@@ -318,6 +320,7 @@ void baseSetup(){
               wifiManager.setDebugOutput(false);
             #endif
 
+            wifiManager.setConfigPortalTimeout(300);
             if (!wifiManager.autoConnect("newESP")){
                 #ifdef UseSerial
                     Serial.println("Wifi connection failed! Resetting !");
@@ -377,7 +380,9 @@ void baseSetup(){
 
 
                 // Subscribe to the topic we are interrested in :
-                myMqtt.subscribe(baseTopic.c_str());
+                String subscribedTopic;
+                subscribedTopic = baseTopic + "/#";
+                myMqtt.subscribe(subscribedTopic.c_str());
 
                 // Send crash informations :
                 File fw = SPIFFS.open("/crash.txt", "w");
@@ -396,37 +401,37 @@ void baseSetup(){
 
 
 
-                if (!MDNS.begin(myHostName.c_str())) {             // Start the mDNS responder for hostname.local
-                    #ifdef UseSerial
-                        Serial.println("Error setting up MDNS responder!");
-                    #endif
-                }
+            if (!MDNS.begin(myHostName.c_str())) {             // Start the mDNS responder for hostname.local
                 #ifdef UseSerial
-                    Serial.println("mDNS responder started");
+                    Serial.println("Error setting up MDNS responder!");
                 #endif
+            }
+            #ifdef UseSerial
+                Serial.println("mDNS responder started");
+            #endif
 
-                MDNS.addService("http", "tcp", webServerPort);
+            MDNS.addService("http", "tcp", webServerPort);
 
 
-                server.on("/", handleHttpRoot);
-                server.on("/reboot", handleReboot);
-                server.on("/setNewSetting", handleSettingChange);
-                server.on("/baseSettings", handleBoardSettings);
-                server.on("/advSettings", handleAdvancedSettings);
-                server.on("/resetWifi", handleResetWifi);
+            server.on("/", handleHttpRoot);
+            server.on("/reboot", handleReboot);
+            server.on("/setNewSetting", handleSettingChange);
+            server.on("/baseSettings", handleBoardSettings);
+            server.on("/advSettings", handleAdvancedSettings);
+            server.on("/resetWifi", handleResetWifi);
 
-                //ArduinoOTA.begin();
-                httpUpdater.setup(&server);
+            //ArduinoOTA.begin();
+            httpUpdater.setup(&server);
 
-                // Start the server
-                server.begin(webServerPort);
+            // Start the server
+            server.begin(webServerPort);
 
-                #ifdef UseSerial
-                    Serial.print("Web server started at ");
-                    Serial.print(WiFi.localIP());
-                    Serial.print(":");
-                    Serial.println(webServerPort);
-                #endif
+            #ifdef UseSerial
+                Serial.print("Web server started at ");
+                Serial.print(WiFi.localIP());
+                Serial.print(":");
+                Serial.println(webServerPort);
+            #endif
 
 }
 
