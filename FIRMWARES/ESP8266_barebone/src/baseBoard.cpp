@@ -1,21 +1,21 @@
 #include "baseBoard.h"
 #include "customBoard.h"
 
-  String baseTopic;
-  boolean mqttConnected=false;
-  String mqttServer;
-  unsigned int mqttPort;
-  unsigned int webServerPort;
-  unsigned int MQTT_NUM_TRIES;      // How many times should we try to connect to mqtt broker ?
-  boolean SPIFFSAvailable=false;
-  boolean needReboot=false;
-  WiFiClient espClient;
-  PubSubClient myMqtt(espClient);
-  String myHostName;
-  ESP8266WebServer server(webServerPort);
-  EspSaveCrash SaveCrash;                   // Save crashes informations to EEPROM to retrieve later !
-  ESP8266HTTPUpdateServer httpUpdater;
-  WiFiManager wifiManager;
+String baseTopic;
+boolean mqttConnected=false;
+String mqttServer;
+unsigned int mqttPort;
+unsigned int webServerPort;
+unsigned int MQTT_NUM_TRIES;      // How many times should we try to connect to mqtt broker ?
+boolean SPIFFSAvailable=false;
+boolean needReboot=false;
+WiFiClient espClient;
+PubSubClient myMqtt(espClient);
+String myHostName;
+ESP8266WebServer server(8000);
+EspSaveCrash SaveCrash;                   // Save crashes informations to EEPROM to retrieve later !
+WiFiManager wifiManager;
+ESP8266HTTPUpdateServer httpUpdater(true);      // Web updater
 
 
 void blink(){
@@ -51,12 +51,13 @@ void handleSettingChange(){
           String arg;
           String fileName;
 
-          if (server.args() == 0) {
+          if (server.args() == 1) {
             arg=server.arg(0);
-            fileName=server.argName(0) + ".txt";
-            return server.send(500, "text/plain", "Missing setting name");
+            fileName="/" + server.argName(0) + ".txt";
             saveLineToFile(fileName.c_str(), arg.c_str());
             needReboot = true;
+          }else{
+            return server.send(500, "text/plain", "There must be only one setting.");
           }
           handleAdvancedSettings();
       }
@@ -69,7 +70,7 @@ void handleAdvancedSettings(){
           output += "<div align='center'><h1>Advanced Settings</h1></div><br>";
           output += "<table border=1><th>Setting Name</th><th>Value</th>";
 
-          output += "<form action='/setNewSetting'><tr><td>Hostname :</td><td><input name='hostname' value='" + myHostName + "'> <input type=submit value='Change'><td></tr></form>";
+          output += "<form action='/setNewSetting'><tr><td>Hostname :</td><td><input name='hostname' value='" + myHostName + "'> <input type=submit value='Change'></td></tr></form>";
           output += "<form action='/setNewSetting'><tr><td>Web Server Port :</td><td><input name='webServerPort' value='" + String(webServerPort) + "'> <input type=submit value='Change'></td></tr></form>";
           output += "<form action='/setNewSetting'><tr><td>Mqtt Server ip :</td><td><input name='mqttServer' value='" + mqttServer + "'> <input type=submit value='Change'></td></tr></form>";
           output += "<form action='/setNewSetting'><tr><td>Mqtt Server Port :</td><td><input name='mqttServerPort' value='" + String(mqttPort) + "'> <input type=submit value='Change'></td></tr></form>";
@@ -79,6 +80,7 @@ void handleAdvancedSettings(){
           output += "</table><br>";
           output += "<form action='/reboot' ><input type=submit value='Reboot'></form><br><br><br>";
           output += "<a href='/resetWifi'>Reset wifi settings</a><br>";
+          output += "<br><a href='/update'>Update firmware</a><br>";
 
           if (needReboot){
               output += "<font color='red'><b>Settings has changed, a reboot is needed !</b></font>";
@@ -89,7 +91,7 @@ void handleAdvancedSettings(){
       }
 
 
-String loadLineFromFile(const char*  fileName,  const char* defaultValue){
+String loadStringFromFile(const char*  fileName,  const char* defaultValue){
           String fname;
           String fileData;
 
@@ -178,6 +180,7 @@ void mqttReport(){
                       esp/#devicename#/system/gatewayip							// sends device's gateway IP
                       esp/#devicename#/system/dnsip								// sends device's DNS IP
                       esp/#devicename#/system/macaddress							// sends device's MAC address
+                      esp/#devicename#/system/firmwareBuildDate							// sends device's firmware version
                  */
 
                reportTopic = baseTopic + "/system/freeHeap";
@@ -211,6 +214,10 @@ void mqttReport(){
 
               reportTopic = baseTopic + "/system/macaddress";
               payload = WiFi.macAddress();
+              myMqtt.publish(reportTopic.c_str(), payload.c_str());
+
+              reportTopic = baseTopic + "/system/firmwareBuildDate";
+              payload = getBuildDateTime();
               myMqtt.publish(reportTopic.c_str(), payload.c_str());
 
            }
@@ -255,7 +262,25 @@ void mqttMessageArrived(char* topic, byte* payload, unsigned int length) {
           handleMqttIncomingMessage(topic, payload, length);
       } // End mqttMessageArrived
 
+/**
+ *  Returns a string YYYY/MM/DD HH:MM:SS which contains the firmware build date/time.
+ */
+String getBuildDateTime(){
+    char tformat[20]; // 2019/03/05 20:44:02
 
+    DateTime dtc=DateTime(F(__DATE__), F(__TIME__));
+
+    sprintf(tformat,"%d/%02d/%02d %02d:%02d:%02d",
+        dtc.year(),
+        dtc.month(),
+        dtc.day(),
+        dtc.hour(),
+        dtc.minute(),
+        dtc.second()
+        );
+
+    return String(tformat);
+}
 
 void baseSetup(){
 
@@ -283,14 +308,14 @@ void baseSetup(){
                     Serial.println("SPIFFS begin OK!");
                 #endif
                 // Read settings from files :
-                myHostName = loadLineFromFile("/hostname.txt", "newESP");
-                mqttServer = loadLineFromFile("/mqttServer.txt", "192.168.8.1");
-                webServerPort = atoi(loadLineFromFile("/webServerPort.txt", "8000").c_str());
-                mqttPort =  atoi(loadLineFromFile("/mqttServerPort.txt", "1883").c_str());
-                MQTT_NUM_TRIES =  atoi(loadLineFromFile("/mqttNumTries.txt", "5").c_str());
+                myHostName = loadStringFromFile("/hostname.txt", "newESP");
+                mqttServer = loadStringFromFile("/mqttServer.txt", "192.168.0.88");
+                webServerPort = atoi(loadStringFromFile("/webServerPort.txt", "8000").c_str());
+                mqttPort =  atoi(loadStringFromFile("/mqttServerPort.txt", "1883").c_str());
+                MQTT_NUM_TRIES =  atoi(loadStringFromFile("/mqttNumTries.txt", "5").c_str());
 
                 baseTopic = String("/esp/") + myHostName;
-                baseTopic = loadLineFromFile("/mqttBaseTopic.txt", baseTopic.c_str());
+                baseTopic = loadStringFromFile("/mqttBaseTopic.txt", baseTopic.c_str());
                 #ifdef UseSerial
                     Serial.print("Base Topic set to ");
                     Serial.println(baseTopic);                        // Tell us what network we're connected to
@@ -303,13 +328,7 @@ void baseSetup(){
                 SPIFFSAvailable=false;
                 myHostName="newESP";
             }
-
-            if (SPIFFSAvailable){
-                if (!SPIFFS.exists("/inputSettings.dat")){
-                    File ftouch = SPIFFS.open("/inputSettings.dat","w");
-                    ftouch.close();
-                }
-            }
+            WiFi.hostname(myHostName.c_str());
 
             // Disable serial output if needed
             #ifdef UseSerial
@@ -318,6 +337,9 @@ void baseSetup(){
               wifiManager.setDebugOutput(false);
             #endif
 
+            // 5 minutes timeout : if the setup wifi is not available on startup,
+            // we setup a captive portal, then we reboot to check again if wifi is back.
+            wifiManager.setConfigPortalTimeout(300);
             if (!wifiManager.autoConnect("newESP")){
                 #ifdef UseSerial
                     Serial.println("Wifi connection failed! Resetting !");
@@ -328,7 +350,7 @@ void baseSetup(){
 
             #ifdef UseSerial
                 Serial.print("Connected to ");
-                Serial.println(WiFi.SSID());                        // Tell us what network we're connected to
+                Serial.println(WiFi.SSID());
                 Serial.print("IP address:\t");
                 Serial.println(WiFi.localIP());
                 Serial.print("Hostname:\t");
@@ -377,13 +399,19 @@ void baseSetup(){
 
 
                 // Subscribe to the topic we are interrested in :
-                myMqtt.subscribe(baseTopic.c_str());
+                String subscribedTopic;
+                subscribedTopic = baseTopic + "/#";
+                myMqtt.subscribe(subscribedTopic.c_str());
 
-                // Send crash informations :
+                // Send last crash informations :
+                // Save first the crash to a file.
                 File fw = SPIFFS.open("/crash.txt", "w");
                 SaveCrash.print(fw);
                 fw.close();
+                // Clear the crash from eeprom
                 SaveCrash.clear();
+
+                // Then send the crash info via MQTT.
                 File fr = SPIFFS.open("/crash.txt","r");
                 String lineData;
                 String reportTopic;
@@ -395,37 +423,37 @@ void baseSetup(){
             }
 
 
-
-                if (!MDNS.begin(myHostName.c_str())) {             // Start the mDNS responder for hostname.local
-                    #ifdef UseSerial
-                        Serial.println("Error setting up MDNS responder!");
-                    #endif
-                }
+            // Start the mDNS responder for myhostname.local
+            if (!MDNS.begin(myHostName.c_str())) {
                 #ifdef UseSerial
-                    Serial.println("mDNS responder started");
+                    Serial.println("Error setting up MDNS responder!");
                 #endif
+            }
+            #ifdef UseSerial
+                Serial.println("mDNS responder started");
+            #endif
 
-                MDNS.addService("http", "tcp", webServerPort);
+            MDNS.addService("http", "tcp", webServerPort);
 
+            server.on("/", handleHttpRoot);
+            server.on("/reboot", handleReboot);
+            server.on("/setNewSetting", handleSettingChange);
+            server.on("/baseSettings", handleBoardSettings);
+            server.on("/advSettings", handleAdvancedSettings);
+            server.on("/resetWifi", handleResetWifi);
 
-                server.on("/", handleHttpRoot);
-                server.on("/reboot", handleReboot);
-                server.on("/setNewSetting", handleSettingChange);
-                server.on("/baseSettings", handleBoardSettings);
-                server.on("/advSettings", handleAdvancedSettings);
-                server.on("/resetWifi", handleResetWifi);
+            // Updater page :
+            httpUpdater.setup(&server);
 
-                // Updater page :
-                httpUpdater.setup(&server);
-                // Start the server
-                server.begin();
+            // Start the server
+            server.begin(webServerPort);
 
-                #ifdef UseSerial
-                    Serial.print("Web server started at ");
-                    Serial.print(WiFi.localIP());
-                    Serial.print(":");
-                    Serial.println(webServerPort);
-                #endif
+            #ifdef UseSerial
+                Serial.print("Web server started at ");
+                Serial.print(WiFi.localIP());
+                Serial.print(":");
+                Serial.println(webServerPort);
+            #endif
 }
 
 void baseLoop(){
@@ -440,17 +468,16 @@ void baseLoop(){
     // Handle http client requests:
     server.handleClient();
 
-
     // Handle MQTT incoming messages :
     if (mqttConnected){
         myMqtt.loop();
     }
 
-      unsigned long diff = millis() - previousTime;
-
-      if(diff > (mqttReportInterval*1000)) {
-          mqttReport();
-          previousTime = millis();
-      }
+    // Should we post a mqtt report ?
+    unsigned long diff = millis() - previousTime;
+    if(diff > (mqttReportInterval*1000)) {
+        mqttReport();
+        previousTime = millis();
+    }
 
 }

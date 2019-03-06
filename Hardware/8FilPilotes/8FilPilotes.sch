@@ -198,7 +198,7 @@ Wire Wire Line
 	6400 2950 6400 2900
 Connection ~ 6400 2900
 Wire Wire Line
-	6400 2900 7550 2900
+	6400 2900 6700 2900
 Wire Wire Line
 	6400 3250 6400 3300
 Wire Wire Line
@@ -250,11 +250,7 @@ Wire Wire Line
 Wire Wire Line
 	7350 4600 7650 4600
 Wire Wire Line
-	6100 3400 6350 3400
-Wire Wire Line
 	6100 3600 6350 3600
-Text Label 6150 3400 0    60   ~ 0
-TXD
 Text Label 6150 3600 0    60   ~ 0
 RXD
 Text Label 7350 4500 0    60   ~ 0
@@ -323,4 +319,28 @@ Text Label 7250 2500 0    60   ~ 0
 RCLK
 Text Label 7250 2600 0    60   ~ 0
 GND
+$Comp
+L 8FilPilotes-rescue:R R1
+U 1 1 5C7F9C96
+P 6700 3100
+F 0 "R1" H 6770 3146 50  0000 L CNN
+F 1 "10k" H 6770 3055 50  0000 L CNN
+F 2 "Resistor_SMD:R_0805_2012Metric" V 6630 3100 50  0001 C CNN
+F 3 "" H 6700 3100 50  0000 C CNN
+	1    6700 3100
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	6700 2950 6700 2900
+Connection ~ 6700 2900
+Wire Wire Line
+	6700 2900 7550 2900
+Wire Wire Line
+	6100 3400 6350 3400
+Wire Wire Line
+	6100 3500 6700 3500
+Wire Wire Line
+	6700 3500 6700 3250
+Text Label 6150 3400 0    60   ~ 0
+TXD
 $EndSCHEMATC

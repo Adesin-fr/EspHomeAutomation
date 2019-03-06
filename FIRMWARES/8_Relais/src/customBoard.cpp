@@ -23,6 +23,7 @@ void handleMqttIncomingMessage(char* topic, byte* payload, unsigned int length){
     String myTopic= topic;
     String sOutNumber;
     byte numPin;
+    long timerValue;
 
     for (unsigned int i = 0; i < length; i++) {
         sPayload += (char)payload[i];
@@ -50,19 +51,36 @@ void handleMqttIncomingMessage(char* topic, byte* payload, unsigned int length){
             }
         }
 
-    }else if  (myTopic.indexOf("/setTimed/")){
+    }else if  (myTopic.indexOf("/setToggleTimer/")){
         // Extract the output number from the topic :
-        sOutNumber= myTopic.substring(myTopic.indexOf("/setTimed/")+10);
+        sOutNumber= myTopic.substring(myTopic.indexOf("/setToggleTimer/")+16);
         numPin = atoi(sOutNumber.c_str());
-        // Set the output timer :
-        if (outputTimer[numPin]!=0 ){
+
+        // if the timer is already fired, we stop it
+        if (outputTimer[numPin]!=0){
+            outputTimer[numPin]=0;
+        }else{
+            // Else we start the timer.
+            // payload contains the timer value :
+            timerValue =  atoi(sPayload.c_str());
+            if (timerValue != 0){
+                // If no timerValue specified, we keep the previous value
+                outputTimer[numPin] = timerValue *  1000;
+            }
+            // and we start the timer.
             outputStartedMillis[numPin] = millis();
+        }
+
+        // Toggle the output :
+        if (bitRead(outputState, numPin) == ON_VALUE){
+            setOutput(numPin, OFF_VALUE);
+        }else{
             setOutput(numPin, ON_VALUE);
         }
 
-    }else if (myTopic.indexOf("/setTimerValue/")){
+    }else if (myTopic.indexOf("/setTimerDefaultValue/")){
         // Extract the output number from the topic :
-        sOutNumber= myTopic.substring(myTopic.indexOf("/setTimerValue/")+15);
+        sOutNumber= myTopic.substring(myTopic.indexOf("/setTimerDefaultValue/")+22);
         numPin = atoi(sOutNumber.c_str());
         // Set the new timer value
         outputTimer[numPin] = atoi(sPayload.c_str());
@@ -95,7 +113,7 @@ void setOutput(byte numPin, boolean newValue){
         lastEvents = lastEvents.substring(pos); // Take the string after the first carriage.
     }
     // Append the event at the end of the string.
-    lastEvents += "Output " + String(numPin) + ", New value " + (newValue?"On":"Off") + "\n";
+    lastEvents += "Output " + String(numPin) + ", New value " + (newValue?"On":"Off") + "<br>\n";
 
     // Report new pin State:
     reportOutputState(numPin);
@@ -117,6 +135,8 @@ void reportOutputState(byte numPin){
 
 }   // End reportOutputState
 
+void handleBoardSettings(){}
+
 
 void boardSetup(){
     String fileName;
@@ -130,8 +150,8 @@ void boardSetup(){
 
         // read default outputTimer in files :
         fileName = "/outputTimer" + String(i) + ".txt";
-        outputTimer[SUBNODECOUNT]         = atoi(loadLineFromFile(fileName.c_str(),"0").c_str());    // Timer in SECONDS for each output
-        outputStartedMillis[SUBNODECOUNT] = 0;
+        outputTimer[i]         = atoi(loadLineFromFile(fileName.c_str(),"0").c_str());    // Timer in SECONDS for each output
+        outputStartedMillis[i] = 0;
     }
 
     // The board is subscribed to his own baseTopic, in the baseBoardSetup function.
@@ -150,8 +170,9 @@ void boardLoop(){
             if (outputStartedMillis[i] + outputTimer[i] <= millis() ){
                 // The timer has expired, stop it !
                 outputStartedMillis[i] = 0;
-                // Set the output to OFF.
-                setOutput(i, OFF_VALUE);
+                // Toggle the output.
+                setOutput(i, !bitRead(outputState, i));
+                reportOutputState(i);
             }
         }
     }

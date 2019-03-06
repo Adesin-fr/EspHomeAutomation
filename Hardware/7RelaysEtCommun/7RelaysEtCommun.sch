@@ -475,11 +475,6 @@ Wire Wire Line
 Text Label 1200 2200 0    50   ~ 0
 3V3
 Wire Wire Line
-	2650 2000 3000 2000
-Wire Wire Line
-	3000 1700 2050 1700
-Connection ~ 2050 1700
-Wire Wire Line
 	2650 2900 3000 2900
 Wire Wire Line
 	3000 2900 3000 3350
@@ -809,12 +804,12 @@ L7
 $Comp
 L Device:R_Small R10
 U 1 1 5BB64501
-P 3000 1850
-F 0 "R10" H 3059 1896 50  0000 L CNN
-F 1 "10k" H 3059 1805 50  0000 L CNN
-F 2 "Resistor_SMD:R_0805_2012Metric_Pad1.15x1.40mm_HandSolder" H 3000 1850 50  0001 C CNN
-F 3 "~" H 3000 1850 50  0001 C CNN
-	1    3000 1850
+P 2750 1850
+F 0 "R10" H 2809 1896 50  0000 L CNN
+F 1 "10k" H 2809 1805 50  0000 L CNN
+F 2 "Resistor_SMD:R_0805_2012Metric_Pad1.15x1.40mm_HandSolder" H 2750 1850 50  0001 C CNN
+F 3 "~" H 2750 1850 50  0001 C CNN
+	1    2750 1850
 	1    0    0    -1  
 $EndComp
 $Comp
@@ -828,13 +823,6 @@ F 3 "" H 3400 2200 50  0001 C CNN
 	1    3400 2200
 	0    -1   -1   0   
 $EndComp
-Wire Wire Line
-	3000 1750 3000 1700
-Wire Wire Line
-	3000 1950 3000 2000
-Wire Wire Line
-	3000 2000 3300 2000
-Connection ~ 3000 2000
 Wire Wire Line
 	3300 2000 3500 2000
 Connection ~ 3300 2000
@@ -944,4 +932,36 @@ Text Label 7000 3200 0    50   ~ 0
 NE
 Text Label 7000 4100 0    50   ~ 0
 NE
+Wire Wire Line
+	2650 2000 2750 2000
+$Comp
+L Device:R_Small R9
+U 1 1 5C8243B1
+P 3050 1850
+F 0 "R9" H 3109 1896 50  0000 L CNN
+F 1 "10k" H 3109 1805 50  0000 L CNN
+F 2 "Resistor_SMD:R_0805_2012Metric_Pad1.15x1.40mm_HandSolder" H 3050 1850 50  0001 C CNN
+F 3 "~" H 3050 1850 50  0001 C CNN
+	1    3050 1850
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	2750 2000 2750 1950
+Connection ~ 2750 2000
+Wire Wire Line
+	2750 2000 3300 2000
+Wire Wire Line
+	2050 1700 2750 1700
+Wire Wire Line
+	3050 1700 3050 1750
+Connection ~ 2050 1700
+Wire Wire Line
+	2750 1750 2750 1700
+Connection ~ 2750 1700
+Wire Wire Line
+	2750 1700 3050 1700
+Wire Wire Line
+	3050 1950 3050 2200
+Wire Wire Line
+	3050 2200 2650 2200
 $EndSCHEMATC

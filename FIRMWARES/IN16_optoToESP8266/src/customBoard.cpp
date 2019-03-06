@@ -38,6 +38,15 @@ void boardSetup(){
     server.on("/ClearAll", handleClearAllRules);
 
 
+    if (SPIFFSAvailable){
+        if (!SPIFFS.exists("/inputSettings.dat")){
+            File ftouch = SPIFFS.open("/inputSettings.dat","w");
+            ftouch.close();
+        }
+    }
+
+
+
 } // End boardSetup
 
 

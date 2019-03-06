@@ -2995,7 +2995,7 @@
   )
 
   (gr_text "GND\nRXD\nTXD\n3V3" (at 66.548 52.07 90) (layer F.SilkS)
-    (effects (font (size 1.5 1.5) (thickness 0.3)))
+    (effects (font (size 1.5 1.2) (thickness 0.2)))
   )
   (gr_text 5V (at 47.625 49.149) (layer F.SilkS)
     (effects (font (size 1.5 1.5) (thickness 0.3)))

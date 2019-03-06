@@ -136,72 +136,28 @@ Wire Wire Line
 Wire Wire Line
 	7100 1650 7350 1650
 Wire Wire Line
-	8750 4150 8450 4150
+	1600 3000 1300 3000
 Wire Wire Line
-	8750 4400 8450 4400
-Text Label 8450 4400 0    60   ~ 0
+	1600 3250 1300 3250
+Text Label 1300 3250 0    60   ~ 0
 NEUTRE
-Text Label 8450 4150 0    60   ~ 0
+Text Label 1300 3000 0    60   ~ 0
 PH_IN
 $Comp
 L FilPilote-rescue:HLK-PM01 U5
 U 1 1 57E3D6E0
-P 9400 4300
-F 0 "U5" H 9200 4100 60  0000 C CNN
-F 1 "HLK-PM01" H 9350 4550 60  0000 C CNN
-F 2 "MyLibrary.pretty:HLK-PM01" H 9400 4300 60  0001 C CNN
-F 3 "" H 9400 4300 60  0000 C CNN
-	1    9400 4300
+P 2250 3150
+F 0 "U5" H 2050 2950 60  0000 C CNN
+F 1 "HLK-PM03" H 2200 3400 60  0000 C CNN
+F 2 "MyLibrary.pretty:HLK-PM01" H 2250 3150 60  0001 C CNN
+F 3 "" H 2250 3150 60  0000 C CNN
+	1    2250 3150
 	1    0    0    -1  
 $EndComp
-Wire Wire Line
-	10050 4100 10350 4100
-Wire Wire Line
-	10050 4450 10350 4450
-Text Label 10150 4100 0    60   ~ 0
+Text Label 3000 2950 0    60   ~ 0
 GND
-Text Label 10150 4450 0    60   ~ 0
-VCC
-Wire Wire Line
-	9000 5750 8850 5750
-Wire Wire Line
-	9300 6000 9300 6250
-Text Label 9500 6250 0    60   ~ 0
-GND
-Text Label 9800 5750 0    60   ~ 0
+Text Label 3000 3300 0    60   ~ 0
 3V3
-Text Label 8700 5750 0    60   ~ 0
-VCC
-$Comp
-L FilPilote-rescue:C C3
-U 1 1 57E3DA4C
-P 10250 6000
-F 0 "C3" H 10275 6100 50  0000 L CNN
-F 1 "10u" H 10275 5900 50  0000 L CNN
-F 2 "Capacitor_SMD:C_1206_3216Metric_Pad1.42x1.75mm_HandSolder" H 10288 5850 50  0001 C CNN
-F 3 "" H 10250 6000 50  0000 C CNN
-	1    10250 6000
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	10250 6150 10250 6250
-Wire Wire Line
-	10250 5850 10250 5750
-Wire Wire Line
-	10250 6250 9300 6250
-Wire Wire Line
-	10250 5750 10050 5750
-$Comp
-L FilPilote-rescue:AMS1117 U3
-U 1 1 5875E219
-P 9400 5750
-F 0 "U3" H 9500 5500 50  0000 R BNN
-F 1 "AMS1117" H 9300 6000 50  0000 C TNN
-F 2 "Package_TO_SOT_SMD:SOT-223-3_TabPin2" H 9300 5800 60  0001 C CNN
-F 3 "" H 9300 5800 60  0000 C CNN
-	1    9400 5750
-	1    0    0    -1  
-$EndComp
 Wire Wire Line
 	9350 1100 9350 1650
 Wire Wire Line
@@ -340,7 +296,7 @@ Wire Wire Line
 	2950 1000 2950 750 
 Connection ~ 2950 750 
 Wire Wire Line
-	2950 750  4300 750 
+	2950 750  3950 750 
 Wire Wire Line
 	3550 1200 4100 1200
 Connection ~ 4100 1200
@@ -379,30 +335,9 @@ Wire Wire Line
 Wire Wire Line
 	3800 1900 3550 1900
 Text Label 3600 1800 0    50   ~ 0
-OP1
+O1
 Text Label 3600 1900 0    50   ~ 0
-OP2
-$Comp
-L FilPilote-rescue:C C1
-U 1 1 5C5D3558
-P 8850 6000
-F 0 "C1" H 8875 6100 50  0000 L CNN
-F 1 "10u" H 8875 5900 50  0000 L CNN
-F 2 "Capacitor_SMD:C_1206_3216Metric_Pad1.42x1.75mm_HandSolder" H 8888 5850 50  0001 C CNN
-F 3 "" H 8850 6000 50  0000 C CNN
-	1    8850 6000
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	8850 5850 8850 5750
-Connection ~ 8850 5750
-Wire Wire Line
-	8850 5750 8550 5750
-Wire Wire Line
-	8850 6150 8850 6250
-Wire Wire Line
-	8850 6250 9300 6250
-Connection ~ 9300 6250
+O2
 Text Label 4700 2550 0    50   ~ 0
 GND
 Text Label 7100 1100 0    50   ~ 0
@@ -414,25 +349,40 @@ O2
 Text Label 7100 1850 0    50   ~ 0
 GND
 $Comp
-L Connector_Generic:Conn_01x02 J2
-U 1 1 5C7E750B
-P 9300 5200
-F 0 "J2" V 9266 5012 50  0000 R CNN
-F 1 "Conn_01x02" V 9175 5012 50  0000 R CNN
-F 2 "Jumper:SolderJumper-2_P1.3mm_Open_RoundedPad1.0x1.5mm" H 9300 5200 50  0001 C CNN
-F 3 "~" H 9300 5200 50  0001 C CNN
-	1    9300 5200
-	0    -1   -1   0   
+L FilPilote-rescue:C C3
+U 1 1 57E3DA4C
+P 3550 3100
+F 0 "C3" H 3575 3200 50  0000 L CNN
+F 1 "100nF" H 3575 3000 50  0000 L CNN
+F 2 "Capacitor_SMD:C_1206_3216Metric_Pad1.42x1.75mm_HandSolder" H 3588 2950 50  0001 C CNN
+F 3 "" H 3550 3100 50  0000 C CNN
+	1    3550 3100
+	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	8850 5750 8850 5400
+	2900 2950 3550 2950
 Wire Wire Line
-	8850 5400 9300 5400
+	3550 3250 3550 3300
 Wire Wire Line
-	9400 5400 10050 5400
+	2900 3300 3550 3300
+$Comp
+L Device:R_Small R?
+U 1 1 5C8005D7
+P 3950 1000
+F 0 "R?" H 4100 950 50  0000 R CNN
+F 1 "10K" H 4100 1050 50  0000 R CNN
+F 2 "Resistor_SMD:R_0805_2012Metric_Pad1.15x1.40mm_HandSolder" H 3950 1000 50  0001 C CNN
+F 3 "~" H 3950 1000 50  0001 C CNN
+	1    3950 1000
+	-1   0    0    1   
+$EndComp
 Wire Wire Line
-	10050 5400 10050 5750
-Connection ~ 10050 5750
+	3950 900  3950 750 
+Connection ~ 3950 750 
 Wire Wire Line
-	10050 5750 9600 5750
+	3950 750  4300 750 
+Wire Wire Line
+	3950 1100 3950 1400
+Wire Wire Line
+	3950 1400 3550 1400
 $EndSCHEMATC

@@ -684,7 +684,7 @@ Connection ~ 3350 4500
 Wire Wire Line
 	3900 4200 3900 2800
 Wire Wire Line
-	3900 2800 2850 2800
+	3900 2800 3150 2800
 Connection ~ 2850 2800
 Wire Wire Line
 	3900 4300 3700 4300
@@ -692,14 +692,34 @@ Wire Wire Line
 	3700 4400 3900 4400
 Wire Wire Line
 	3000 3200 2750 3200
-Wire Wire Line
-	3000 3300 2750 3300
 Text Label 2850 3200 0    50   ~ 0
 TXD
-Text Label 2850 3300 0    50   ~ 0
+Text Label 2850 3400 0    50   ~ 0
 RXD
 Text Label 3750 4300 0    50   ~ 0
 TXD
 Text Label 3750 4400 0    50   ~ 0
 RXD
+$Comp
+L Device:R_Small R11
+U 1 1 5C80A805
+P 3150 2950
+F 0 "R11" H 3209 2996 50  0000 L CNN
+F 1 "10K" H 3209 2905 50  0000 L CNN
+F 2 "Resistor_SMD:R_0805_2012Metric_Pad1.15x1.40mm_HandSolder" H 3150 2950 50  0001 C CNN
+F 3 "~" H 3150 2950 50  0001 C CNN
+	1    3150 2950
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	3150 2850 3150 2800
+Connection ~ 3150 2800
+Wire Wire Line
+	3150 2800 2850 2800
+Wire Wire Line
+	2750 3300 3150 3300
+Wire Wire Line
+	3150 3300 3150 3050
+Wire Wire Line
+	2750 3400 3150 3400
 $EndSCHEMATC

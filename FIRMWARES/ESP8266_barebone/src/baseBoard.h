@@ -3,20 +3,22 @@
 
 #include <ESP8266WiFi.h>
 #include <WiFiUdp.h>
-#include <ESP8266HTTPUpdateServer.h>  //  To upload through terminal you can use: curl -F "image=@firmware.bin" esp8266-webupdate.local/update
 #include <ESP8266WebServer.h>
 #include <ESP8266mDNS.h>
+#include <ESP8266HTTPUpdateServer.h>
 #include <PubSubClient.h>           // for the MQTT client
 #include <DNSServer.h>              // Needed for WiFiManager library
 #include <WiFiManager.h>            //https://github.com/tzapu/WiFiManager
 #include <EspSaveCrash.h>
 #include <FS.h>
+#include <ArduinoOTA.h>
+#include "RTClib.h"
 
 
     #define BlueLED         2       // This led is on the ESP12F board
     #define LED_ON          0
     #define LED_OFF         1
-    #define mqttReportInterval   300    // mqtt report every 60 seconds
+    #define mqttReportInterval   30    // mqtt report every 60 seconds
 
 
     // Variables need to be extern ! They are initialized in the .cpp file
@@ -36,7 +38,6 @@
     extern    String myHostName;
     extern    ESP8266WebServer server;
     extern    EspSaveCrash SaveCrash;                   // Save crashes informations to EEPROM to retrieve later !
-    extern    ESP8266HTTPUpdateServer httpUpdater;
     extern    WiFiManager wifiManager;
 
     void blink();
@@ -52,7 +53,8 @@
     void baseSetup();
     void baseLoop();
     void mqttMessageArrived(char* topic, byte* payload, unsigned int length);
-    String loadLineFromFile(const char*  fileName,  const char* defaultValue);
+    String loadStringFromFile(const char*  fileName,  const char* defaultValue);
+    String getBuildDateTime();
 
 
 #endif

@@ -634,4 +634,22 @@ Wire Wire Line
 Connection ~ 3550 2000
 Wire Wire Line
 	3550 2000 3750 2000
+$Comp
+L Device:R_Small R6
+U 1 1 5C84F39A
+P 3350 1800
+F 0 "R6" H 3409 1846 50  0000 L CNN
+F 1 "10K" H 3409 1755 50  0000 L CNN
+F 2 "Resistor_SMD:R_0805_2012Metric_Pad1.15x1.40mm_HandSolder" H 3350 1800 50  0001 C CNN
+F 3 "~" H 3350 1800 50  0001 C CNN
+	1    3350 1800
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	3000 1700 3350 1700
+Connection ~ 3000 1700
+Wire Wire Line
+	3350 1900 3350 2200
+Wire Wire Line
+	3350 2200 2650 2200
 $EndSCHEMATC

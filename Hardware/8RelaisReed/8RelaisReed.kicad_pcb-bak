@@ -1,8 +1,8 @@
-(kicad_pcb (version 20171130) (host pcbnew 5.0.0-fee4fd1~66~ubuntu16.04.1)
+(kicad_pcb (version 20171130) (host pcbnew 5.0.1-33cea8e~68~ubuntu18.04.1)
 
   (general
     (thickness 1.6)
-    (drawings 6)
+    (drawings 7)
     (tracks 271)
     (zones 0)
     (modules 28)
@@ -58,6 +58,7 @@
     (pad_size 1.524 1.524)
     (pad_drill 0.762)
     (pad_to_mask_clearance 0.2)
+    (solder_mask_min_width 0.25)
     (aux_axis_origin 0 0)
     (grid_origin 214.63 74.93)
     (visible_elements FFFFFF7F)
@@ -1099,7 +1100,7 @@
     (fp_text reference J1 (at 0 -2.33 90) (layer F.SilkS)
       (effects (font (size 1 1) (thickness 0.15)))
     )
-    (fp_text value ISP (at 2.54 3.937 180) (layer F.SilkS)
+    (fp_text value ISP (at -2.794 3.683 180) (layer F.SilkS)
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_line (start -0.635 -1.27) (end 1.27 -1.27) (layer F.Fab) (width 0.1))
@@ -1217,6 +1218,9 @@
     )
   )
 
+  (gr_text "3.3\nTX\nRX\nGND" (at 159.385 101.219 90) (layer F.SilkS)
+    (effects (font (size 1.5 1.5) (thickness 0.3)))
+  )
   (gr_text GND (at 143.637 107.95) (layer F.SilkS)
     (effects (font (size 1.5 1.5) (thickness 0.3)))
   )

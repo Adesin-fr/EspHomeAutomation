@@ -15,7 +15,7 @@ Comment3 ""
 Comment4 ""
 $EndDescr
 $Comp
-L mySensors_8RelaisReed-rescue:AMS1117 U1
+L 8RelaisReed-rescue:AMS1117-mySensors_8RelaisReed-rescue U1
 U 1 1 58764782
 P 1950 950
 F 0 "U1" H 2050 700 50  0000 R BNN
@@ -26,7 +26,7 @@ F 3 "" H 1850 1000 60  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L mySensors_8RelaisReed-rescue:CONN_01X02 P1
+L 8RelaisReed-rescue:CONN_01X02-mySensors_8RelaisReed-rescue P1
 U 1 1 58764921
 P 800 1000
 F 0 "P1" H 800 1150 50  0000 C CNN
@@ -39,7 +39,7 @@ $EndComp
 Text Label 2700 950  0    60   ~ 0
 3V3
 $Comp
-L mySensors_8RelaisReed-rescue:C C2
+L 8RelaisReed-rescue:C-mySensors_8RelaisReed-rescue C2
 U 1 1 58764C44
 P 2400 1100
 F 0 "C2" H 2425 1200 50  0000 L CNN
@@ -52,7 +52,7 @@ $EndComp
 Text Label 2450 950  0    60   ~ 0
 VCC
 $Comp
-L mySensors_8RelaisReed-rescue:C C1
+L 8RelaisReed-rescue:C-mySensors_8RelaisReed-rescue C1
 U 1 1 587650E8
 P 1350 1100
 F 0 "C1" H 1375 1200 50  0000 L CNN
@@ -63,7 +63,7 @@ F 3 "" H 1350 1100 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L mySensors_8RelaisReed-rescue:RELAY_SIP-1A05 R1
+L 8RelaisReed-rescue:RELAY_SIP-1A05-mySensors_8RelaisReed-rescue R1
 U 1 1 58766F32
 P 8150 1150
 F 0 "R1" H 8150 1150 60  0000 C CNN
@@ -74,7 +74,7 @@ F 3 "" H 8150 1150 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L mySensors_8RelaisReed-rescue:CONN_01X02 P4
+L 8RelaisReed-rescue:CONN_01X02-mySensors_8RelaisReed-rescue P4
 U 1 1 5876743C
 P 8900 900
 F 0 "P4" H 8900 1050 50  0000 C CNN
@@ -107,7 +107,7 @@ Wire Wire Line
 Text Label 7550 750  0    60   ~ 0
 S0
 $Comp
-L mySensors_8RelaisReed-rescue:RELAY_SIP-1A05 R2
+L 8RelaisReed-rescue:RELAY_SIP-1A05-mySensors_8RelaisReed-rescue R2
 U 1 1 587679A2
 P 8150 1750
 F 0 "R2" H 8150 1750 60  0000 C CNN
@@ -118,7 +118,7 @@ F 3 "" H 8150 1750 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L mySensors_8RelaisReed-rescue:CONN_01X02 P5
+L 8RelaisReed-rescue:CONN_01X02-mySensors_8RelaisReed-rescue P5
 U 1 1 587679A8
 P 8900 1500
 F 0 "P5" H 8900 1650 50  0000 C CNN
@@ -141,7 +141,7 @@ Wire Wire Line
 Text Label 7550 1350 0    60   ~ 0
 S1
 $Comp
-L mySensors_8RelaisReed-rescue:RELAY_SIP-1A05 R3
+L 8RelaisReed-rescue:RELAY_SIP-1A05-mySensors_8RelaisReed-rescue R3
 U 1 1 58767BEA
 P 8150 2350
 F 0 "R3" H 8150 2350 60  0000 C CNN
@@ -152,7 +152,7 @@ F 3 "" H 8150 2350 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L mySensors_8RelaisReed-rescue:CONN_01X02 P6
+L 8RelaisReed-rescue:CONN_01X02-mySensors_8RelaisReed-rescue P6
 U 1 1 58767BF0
 P 8900 2100
 F 0 "P6" H 8900 2250 50  0000 C CNN
@@ -175,7 +175,7 @@ Wire Wire Line
 Text Label 7550 1950 0    60   ~ 0
 S2
 $Comp
-L mySensors_8RelaisReed-rescue:RELAY_SIP-1A05 R4
+L 8RelaisReed-rescue:RELAY_SIP-1A05-mySensors_8RelaisReed-rescue R4
 U 1 1 58767BFC
 P 8150 2950
 F 0 "R4" H 8150 2950 60  0000 C CNN
@@ -186,7 +186,7 @@ F 3 "" H 8150 2950 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L mySensors_8RelaisReed-rescue:CONN_01X02 P7
+L 8RelaisReed-rescue:CONN_01X02-mySensors_8RelaisReed-rescue P7
 U 1 1 58767C02
 P 8900 2700
 F 0 "P7" H 8900 2850 50  0000 C CNN
@@ -209,7 +209,7 @@ Wire Wire Line
 Text Label 7550 2550 0    60   ~ 0
 S3
 $Comp
-L mySensors_8RelaisReed-rescue:RELAY_SIP-1A05 R5
+L 8RelaisReed-rescue:RELAY_SIP-1A05-mySensors_8RelaisReed-rescue R5
 U 1 1 58767E7A
 P 8150 3550
 F 0 "R5" H 8150 3550 60  0000 C CNN
@@ -220,7 +220,7 @@ F 3 "" H 8150 3550 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L mySensors_8RelaisReed-rescue:CONN_01X02 P8
+L 8RelaisReed-rescue:CONN_01X02-mySensors_8RelaisReed-rescue P8
 U 1 1 58767E80
 P 8900 3300
 F 0 "P8" H 8900 3450 50  0000 C CNN
@@ -243,7 +243,7 @@ Wire Wire Line
 Text Label 7550 3150 0    60   ~ 0
 S4
 $Comp
-L mySensors_8RelaisReed-rescue:RELAY_SIP-1A05 R6
+L 8RelaisReed-rescue:RELAY_SIP-1A05-mySensors_8RelaisReed-rescue R6
 U 1 1 58767E8C
 P 8150 4150
 F 0 "R6" H 8150 4150 60  0000 C CNN
@@ -254,7 +254,7 @@ F 3 "" H 8150 4150 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L mySensors_8RelaisReed-rescue:CONN_01X02 P9
+L 8RelaisReed-rescue:CONN_01X02-mySensors_8RelaisReed-rescue P9
 U 1 1 58767E92
 P 8900 3900
 F 0 "P9" H 8900 4050 50  0000 C CNN
@@ -277,7 +277,7 @@ Wire Wire Line
 Text Label 7550 3750 0    60   ~ 0
 S5
 $Comp
-L mySensors_8RelaisReed-rescue:RELAY_SIP-1A05 R7
+L 8RelaisReed-rescue:RELAY_SIP-1A05-mySensors_8RelaisReed-rescue R7
 U 1 1 58767E9E
 P 8150 4750
 F 0 "R7" H 8150 4750 60  0000 C CNN
@@ -288,7 +288,7 @@ F 3 "" H 8150 4750 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L mySensors_8RelaisReed-rescue:CONN_01X02 P10
+L 8RelaisReed-rescue:CONN_01X02-mySensors_8RelaisReed-rescue P10
 U 1 1 58767EA4
 P 8900 4500
 F 0 "P10" H 8900 4650 50  0000 C CNN
@@ -311,7 +311,7 @@ Wire Wire Line
 Text Label 7550 4350 0    60   ~ 0
 S6
 $Comp
-L mySensors_8RelaisReed-rescue:RELAY_SIP-1A05 R8
+L 8RelaisReed-rescue:RELAY_SIP-1A05-mySensors_8RelaisReed-rescue R8
 U 1 1 58767EB0
 P 8150 5350
 F 0 "R8" H 8150 5350 60  0000 C CNN
@@ -322,7 +322,7 @@ F 3 "" H 8150 5350 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L mySensors_8RelaisReed-rescue:CONN_01X02 P11
+L 8RelaisReed-rescue:CONN_01X02-mySensors_8RelaisReed-rescue P11
 U 1 1 58767EB6
 P 8900 5100
 F 0 "P11" H 8900 5250 50  0000 C CNN
@@ -684,7 +684,7 @@ Connection ~ 3350 4500
 Wire Wire Line
 	3900 4200 3900 2800
 Wire Wire Line
-	3900 2800 2850 2800
+	3900 2800 3150 2800
 Connection ~ 2850 2800
 Wire Wire Line
 	3900 4300 3700 4300
@@ -692,14 +692,34 @@ Wire Wire Line
 	3700 4400 3900 4400
 Wire Wire Line
 	3000 3200 2750 3200
-Wire Wire Line
-	3000 3300 2750 3300
 Text Label 2850 3200 0    50   ~ 0
 TXD
-Text Label 2850 3300 0    50   ~ 0
+Text Label 2850 3400 0    50   ~ 0
 RXD
 Text Label 3750 4300 0    50   ~ 0
 TXD
 Text Label 3750 4400 0    50   ~ 0
 RXD
+$Comp
+L Device:R_Small R?
+U 1 1 5C80A805
+P 3150 2950
+F 0 "R?" H 3209 2996 50  0000 L CNN
+F 1 "10K" H 3209 2905 50  0000 L CNN
+F 2 "Resistor_SMD:R_0805_2012Metric_Pad1.15x1.40mm_HandSolder" H 3150 2950 50  0001 C CNN
+F 3 "~" H 3150 2950 50  0001 C CNN
+	1    3150 2950
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	3150 2850 3150 2800
+Connection ~ 3150 2800
+Wire Wire Line
+	3150 2800 2850 2800
+Wire Wire Line
+	2750 3300 3150 3300
+Wire Wire Line
+	3150 3300 3150 3050
+Wire Wire Line
+	2750 3400 3150 3400
 $EndSCHEMATC

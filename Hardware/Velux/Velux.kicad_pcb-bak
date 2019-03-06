@@ -1,4 +1,4 @@
-(kicad_pcb (version 20171130) (host pcbnew 5.0.0-fee4fd1~66~ubuntu18.04.1)
+(kicad_pcb (version 20171130) (host pcbnew 5.0.0-fee4fd1~66~ubuntu16.04.1)
 
   (general
     (thickness 1.6)
@@ -449,7 +449,7 @@
     (tags "diode handsolder")
     (path /5BAC58A6)
     (attr smd)
-    (fp_text reference D2 (at 0 -1.65 90) (layer F.SilkS)
+    (fp_text reference D2 (at 2.803 0 90) (layer F.SilkS)
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED (at 0 1.65 90) (layer F.Fab)
@@ -1296,7 +1296,7 @@
   (gr_text "0V   5V" (at 138.049 54.737) (layer F.SilkS)
     (effects (font (size 1.5 1.5) (thickness 0.3)))
   )
-  (gr_text 0V (at 161.925 81.153) (layer F.SilkS)
+  (gr_text GND (at 161.925 81.153) (layer F.SilkS)
     (effects (font (size 1.5 1.5) (thickness 0.3)))
   )
   (gr_text RX (at 162.306 78.613) (layer F.SilkS)

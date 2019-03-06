@@ -296,7 +296,7 @@ Wire Wire Line
 	2950 1000 2950 750 
 Connection ~ 2950 750 
 Wire Wire Line
-	2950 750  4300 750 
+	2950 750  3950 750 
 Wire Wire Line
 	3550 1200 4100 1200
 Connection ~ 4100 1200
@@ -365,4 +365,24 @@ Wire Wire Line
 	3550 3250 3550 3300
 Wire Wire Line
 	2900 3300 3550 3300
+$Comp
+L Device:R_Small R3
+U 1 1 5C8005D7
+P 3950 1000
+F 0 "R3" H 4100 950 50  0000 R CNN
+F 1 "10K" H 4100 1050 50  0000 R CNN
+F 2 "Resistor_SMD:R_0805_2012Metric_Pad1.15x1.40mm_HandSolder" H 3950 1000 50  0001 C CNN
+F 3 "~" H 3950 1000 50  0001 C CNN
+	1    3950 1000
+	-1   0    0    1   
+$EndComp
+Wire Wire Line
+	3950 900  3950 750 
+Connection ~ 3950 750 
+Wire Wire Line
+	3950 750  4300 750 
+Wire Wire Line
+	3950 1100 3950 1400
+Wire Wire Line
+	3950 1400 3550 1400
 $EndSCHEMATC

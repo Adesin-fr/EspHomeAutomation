@@ -1,11 +1,11 @@
 EESchema-LIBRARY Version 2.4
 #encoding utf-8
 #
-# 74xx:74HC595
+# 74xx_74HC595
 #
-DEF 74xx:74HC595 U 0 20 Y Y 1 F N
+DEF 74xx_74HC595 U 0 20 Y Y 1 F N
 F0 "U" -300 550 50 H V C CNN
-F1 "74xx:74HC595" -300 -650 50 H V C CNN
+F1 "74xx_74HC595" -300 -650 50 H V C CNN
 F2 "" 0 0 50 H I C CNN
 F3 "" 0 0 50 H I C CNN
 ALIAS 74LS595 74HCT595
@@ -37,11 +37,11 @@ X QH' 9 400 -500 100 L 50 50 1 0 O
 ENDDRAW
 ENDDEF
 #
-# 8Dimmers-rescue:AP1117D33
+# 8Dimmers-rescue_AP1117D33
 #
-DEF 8Dimmers-rescue:AP1117D33 U 0 30 Y Y 1 F N
+DEF 8Dimmers-rescue_AP1117D33 U 0 30 Y Y 1 F N
 F0 "U" 100 -250 50 H V C CNN
-F1 "8Dimmers-rescue:AP1117D33" 0 250 50 H V C CNN
+F1 "8Dimmers-rescue_AP1117D33" 0 250 50 H V C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 $FPLIST
@@ -59,11 +59,11 @@ X VI 3 -300 0 100 R 50 50 1 1 W
 ENDDRAW
 ENDDEF
 #
-# 8Dimmers-rescue:CONN_01X02
+# 8Dimmers-rescue_CONN_01X02
 #
-DEF 8Dimmers-rescue:CONN_01X02 P 0 40 Y N 1 F N
+DEF 8Dimmers-rescue_CONN_01X02 P 0 40 Y N 1 F N
 F0 "P" 0 150 50 H V C CNN
-F1 "8Dimmers-rescue:CONN_01X02" 100 0 50 V V C CNN
+F1 "8Dimmers-rescue_CONN_01X02" 100 0 50 V V C CNN
 F2 "" 0 0 50 H V C CNN
 F3 "" 0 0 50 H V C CNN
 $FPLIST
@@ -81,11 +81,11 @@ X P2 2 -200 -50 150 R 50 50 1 1 P
 ENDDRAW
 ENDDEF
 #
-# 8Dimmers-rescue:CP
+# 8Dimmers-rescue_CP
 #
-DEF 8Dimmers-rescue:CP C 0 10 N Y 1 F N
+DEF 8Dimmers-rescue_CP C 0 10 N Y 1 F N
 F0 "C" 25 100 50 H V L CNN
-F1 "8Dimmers-rescue:CP" 25 -100 50 H V L CNN
+F1 "8Dimmers-rescue_CP" 25 -100 50 H V L CNN
 F2 "" 38 -150 50 H V C CNN
 F3 "" 0 0 50 H V C CNN
 $FPLIST
@@ -110,11 +110,11 @@ X ~ 2 0 -150 110 U 50 50 1 1 P
 ENDDRAW
 ENDDEF
 #
-# 8Dimmers-rescue:F_Small
+# 8Dimmers-rescue_F_Small
 #
-DEF 8Dimmers-rescue:F_Small F 0 10 N N 1 F N
+DEF 8Dimmers-rescue_F_Small F 0 10 N N 1 F N
 F0 "F" -40 60 50 H V L CNN
-F1 "8Dimmers-rescue:F_Small" -120 -60 50 H V L CNN
+F1 "8Dimmers-rescue_F_Small" -120 -60 50 H V L CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 $FPLIST
@@ -129,11 +129,11 @@ X ~ 2 100 0 50 L 40 40 1 1 P
 ENDDRAW
 ENDDEF
 #
-# 8Dimmers-rescue:LTV-814
+# 8Dimmers-rescue_LTV-814
 #
-DEF 8Dimmers-rescue:LTV-814 U 0 40 Y Y 1 F N
+DEF 8Dimmers-rescue_LTV-814 U 0 40 Y Y 1 F N
 F0 "U" -200 200 50 H V L CNN
-F1 "8Dimmers-rescue:LTV-814" 0 200 50 H V L CNN
+F1 "8Dimmers-rescue_LTV-814" 0 200 50 H V L CNN
 F2 "DIP-4" -200 -200 50 H V L CIN
 F3 "" 25 0 50 H V L CNN
 DRAW
@@ -164,11 +164,11 @@ X ~ 4 300 100 100 L 50 50 1 1 P
 ENDDRAW
 ENDDEF
 #
-# 8Dimmers-rescue:Led_Small
+# 8Dimmers-rescue_Led_Small
 #
-DEF 8Dimmers-rescue:Led_Small D 0 10 N N 1 F N
+DEF 8Dimmers-rescue_Led_Small D 0 10 N N 1 F N
 F0 "D" -50 125 50 H V L CNN
-F1 "8Dimmers-rescue:Led_Small" -175 -100 50 H V L CNN
+F1 "8Dimmers-rescue_Led_Small" -175 -100 50 H V L CNN
 F2 "" 0 0 60 V V C CNN
 F3 "" 0 0 60 V V C CNN
 $FPLIST
@@ -185,11 +185,11 @@ X A 2 100 0 70 L 40 40 1 1 P
 ENDDRAW
 ENDDEF
 #
-# 8Dimmers-rescue:MOC3020M
+# 8Dimmers-rescue_MOC3020M
 #
-DEF 8Dimmers-rescue:MOC3020M U 0 40 Y Y 1 F N
+DEF 8Dimmers-rescue_MOC3020M U 0 40 Y Y 1 F N
 F0 "U" -210 190 50 H V L CNN
-F1 "8Dimmers-rescue:MOC3020M" 0 200 50 H V L CNN
+F1 "8Dimmers-rescue_MOC3020M" 0 200 50 H V L CNN
 F2 "DIP-6" -200 -200 50 H V L CIN
 F3 "" -25 0 50 H V L CNN
 $FPLIST
@@ -220,11 +220,11 @@ X ~ 6 300 100 100 L 50 50 1 1 P
 ENDDRAW
 ENDDEF
 #
-# 8Dimmers-rescue:R
+# 8Dimmers-rescue_R
 #
-DEF 8Dimmers-rescue:R R 0 0 N Y 1 F N
+DEF 8Dimmers-rescue_R R 0 0 N Y 1 F N
 F0 "R" 80 0 50 V V C CNN
-F1 "8Dimmers-rescue:R" 0 0 50 V V C CNN
+F1 "8Dimmers-rescue_R" 0 0 50 V V C CNN
 F2 "" -70 0 50 V V C CNN
 F3 "" 0 0 50 H V C CNN
 $FPLIST
@@ -238,11 +238,11 @@ X ~ 2 0 -150 50 U 50 50 1 1 P
 ENDDRAW
 ENDDEF
 #
-# 8Dimmers-rescue:R_Small
+# 8Dimmers-rescue_R_Small
 #
-DEF 8Dimmers-rescue:R_Small R 0 10 N N 1 F N
+DEF 8Dimmers-rescue_R_Small R 0 10 N N 1 F N
 F0 "R" 30 20 50 H V L CNN
-F1 "8Dimmers-rescue:R_Small" 30 -40 50 H V L CNN
+F1 "8Dimmers-rescue_R_Small" 30 -40 50 H V L CNN
 F2 "" 0 0 50 H V C CNN
 F3 "" 0 0 50 H V C CNN
 $FPLIST
@@ -256,11 +256,11 @@ X ~ 2 0 -100 30 U 50 50 1 1 P
 ENDDRAW
 ENDDEF
 #
-# 8Dimmers-rescue:TRIAC_small
+# 8Dimmers-rescue_TRIAC_small
 #
-DEF 8Dimmers-rescue:TRIAC_small U 0 10 Y Y 1 F N
+DEF 8Dimmers-rescue_TRIAC_small U 0 10 Y Y 1 F N
 F0 "U" 50 100 50 H V C CNN
-F1 "8Dimmers-rescue:TRIAC_small" 0 -150 50 H V C CNN
+F1 "8Dimmers-rescue_TRIAC_small" 0 -150 50 H V C CNN
 F2 "" 0 -50 60 H V C CNN
 F3 "" 0 -50 60 H V C CNN
 DRAW
@@ -275,11 +275,11 @@ X ~ 3 -200 -50 98 R 70 70 1 1 I
 ENDDRAW
 ENDDEF
 #
-# Connector:Conn_01x04_Male
+# Connector_Conn_01x04_Male
 #
-DEF Connector:Conn_01x04_Male J 0 40 Y N 1 F N
+DEF Connector_Conn_01x04_Male J 0 40 Y N 1 F N
 F0 "J" 0 200 50 H V C CNN
-F1 "Connector:Conn_01x04_Male" 0 -300 50 H V C CNN
+F1 "Connector_Conn_01x04_Male" 0 -300 50 H V C CNN
 F2 "" 0 0 50 H I C CNN
 F3 "" 0 0 50 H I C CNN
 $FPLIST
@@ -301,11 +301,11 @@ X Pin_4 4 200 -200 150 L 50 50 1 1 P
 ENDDRAW
 ENDDEF
 #
-# RF_Module:ESP-12F
+# RF_Module_ESP-12F
 #
-DEF RF_Module:ESP-12F U 0 20 Y Y 1 F N
+DEF RF_Module_ESP-12F U 0 20 Y Y 1 F N
 F0 "U" -500 750 50 H V L CNN
-F1 "RF_Module:ESP-12F" 500 750 50 H V R CNN
+F1 "RF_Module_ESP-12F" 500 750 50 H V R CNN
 F2 "RF_Module:ESP-12E" 0 0 50 H I C CNN
 F3 "" -350 100 50 H I C CNN
 ALIAS ESP-12F
@@ -339,11 +339,11 @@ X CS0 9 -600 0 100 R 50 50 1 1 I
 ENDDRAW
 ENDDEF
 #
-# Switch:SW_DPST_x2
+# Switch_SW_DPST_x2
 #
-DEF Switch:SW_DPST_x2 SW 0 0 Y N 2 F N
+DEF Switch_SW_DPST_x2 SW 0 0 Y N 2 F N
 F0 "SW" 0 125 50 H V C CNN
-F1 "Switch:SW_DPST_x2" 0 -100 50 H V C CNN
+F1 "Switch_SW_DPST_x2" 0 -100 50 H V C CNN
 F2 "" 0 0 50 H I C CNN
 F3 "" 0 0 50 H I C CNN
 DRAW
@@ -357,11 +357,11 @@ X B 4 200 0 100 L 50 50 2 1 I
 ENDDRAW
 ENDDEF
 #
-# Transistor_Array:ULN2803A
+# Transistor_Array_ULN2803A
 #
-DEF Transistor_Array:ULN2803A U 0 20 Y Y 1 F N
+DEF Transistor_Array_ULN2803A U 0 20 Y Y 1 F N
 F0 "U" 0 525 50 H V C CNN
-F1 "Transistor_Array:ULN2803A" 0 450 50 H V C CNN
+F1 "Transistor_Array_ULN2803A" 0 450 50 H V C CNN
 F2 "" 50 -650 50 H I L CNN
 F3 "" 100 -200 50 H I C CNN
 ALIAS ULN2802A ULN2801A ULN2804A ULN2805A
@@ -403,11 +403,11 @@ X GND 9 0 -700 100 U 50 50 1 1 W
 ENDDRAW
 ENDDEF
 #
-# power:GND
+# power_GND
 #
-DEF power:GND #PWR 0 0 Y Y 1 F P
+DEF power_GND #PWR 0 0 Y Y 1 F P
 F0 "#PWR" 0 -250 50 H I C CNN
-F1 "power:GND" 0 -150 50 H V C CNN
+F1 "power_GND" 0 -150 50 H V C CNN
 F2 "" 0 0 50 H I C CNN
 F3 "" 0 0 50 H I C CNN
 DRAW
