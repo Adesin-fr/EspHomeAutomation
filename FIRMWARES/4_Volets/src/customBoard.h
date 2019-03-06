@@ -5,7 +5,7 @@
 
 // Board specific defines :
 
-      #define SUBNODECOUNT    7       // how many sub-nodes should we present
+      #define SUBNODECOUNT    4       // how many sub-nodes should we present
 
       #define PIN_SRCLK    12
       #define PIN_SER      13
@@ -16,11 +16,22 @@
 
 // Board specific variables :
 
+    enum RollerAction {
+                Action_Open,
+                Action_Close,
+                Action_Stop
+          };
+
       extern      unsigned long previousTime ;
       extern      byte outputState;
       extern      String lastEvents;
       extern      int outputTimer[SUBNODECOUNT];    // Timer in SECONDS for each output
       extern      unsigned long outputStartedMillis[SUBNODECOUNT];    // Timer in SECONDS for each output
+      extern      RollerAction previousAction[SUBNODECOUNT];    // What was the previous state ?
+      extern      boolean invertAction[SUBNODECOUNT];           // Should the behavior of this output inverted
+
+
+
 
 /*  Board specific MANDATORY functions :
     These functions must be implemented :
@@ -38,8 +49,9 @@
 
       // Board specific custom functions :
 
-            void setOutput(byte numPin, boolean newValue);
+            void setOutputPin(byte numPin, boolean newValue);
             void reportOutputState(byte numPin);
+            void doActionRoller(byte outputNumber, RollerAction action);
 
 
 #endif

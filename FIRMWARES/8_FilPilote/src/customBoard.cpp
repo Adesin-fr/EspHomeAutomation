@@ -21,66 +21,60 @@
 
 void handleBoardSettings(){}
 
-void handleMqttIncomingMessage(char* topic, byte* payload, unsigned int length){
-    String sPayload="";
-    String myTopic= topic;
+void handleMqttIncomingMessage(String myTopic, String sPayload){
     String sOutNumber;
     byte numPin, pctPower;
-
-    for (unsigned int i = 0; i < length; i++) {
-        sPayload += (char)payload[i];
-    }
 
     blink();
 
     // Handle topics
-    if (myTopic.indexOf("/setPower/")){
+    if (myTopic.indexOf("/setPower/")>0){
         // Extract the output number from the topic :
         // The topic should be like /myboard/setPower/7 , ie to toggle output 7
         sOutNumber= myTopic.substring(myTopic.indexOf("/setPower/")+10);
         numPin = atoi(sOutNumber.c_str());
         if (sPayload == "ON" || sPayload == "CONF"){
-            setOutput(numPin, Ordre_Confort);
+            changeOutput(numPin, Ordre_Confort);
         }
         if (sPayload == "CONF-1"){
-            setOutput(numPin, Ordre_Confort_1);
+            changeOutput(numPin, Ordre_Confort_1);
         }
         if (sPayload == "CONF-2"){
-            setOutput(numPin, Ordre_Confort_2);
+            changeOutput(numPin, Ordre_Confort_2);
         }
         if (sPayload == "ECO"){
-            setOutput(numPin, Ordre_Eco);
+            changeOutput(numPin, Ordre_Eco);
         }
         if (sPayload == "HG"){
-            setOutput(numPin, Ordre_HorsGel);
+            changeOutput(numPin, Ordre_HorsGel);
         }
         if (sPayload == "OFF" || sPayload == "ARRET"){
-            setOutput(numPin, Ordre_Arret);
+            changeOutput(numPin, Ordre_Arret);
         }
     }
-    if (myTopic.indexOf("/setPercent/")){
+    if (myTopic.indexOf("/setPercent/")>0){
         // Extract the output number from the topic :
         // The topic should be like /myboard/setPower/7 , ie to toggle output 7
-        sOutNumber= myTopic.substring(myTopic.indexOf("/setPower/")+10);
+        sOutNumber= myTopic.substring(myTopic.indexOf("/setPercent/")+12);
         numPin = atoi(sOutNumber.c_str());
         pctPower = atoi(sPayload.c_str());
         if (pctPower > 50){
-            setOutput(numPin, Ordre_Confort);
+            changeOutput(numPin, Ordre_Confort);
         }
         if (pctPower >= 41 && pctPower <= 50 ){
-            setOutput(numPin, Ordre_Confort_1);
+            changeOutput(numPin, Ordre_Confort_1);
         }
         if (pctPower >= 31 && pctPower <= 40 ){
-            setOutput(numPin, Ordre_Confort_2);
+            changeOutput(numPin, Ordre_Confort_2);
         }
         if (pctPower >= 21 && pctPower <= 30 ){
-            setOutput(numPin, Ordre_Eco);
+            changeOutput(numPin, Ordre_Eco);
         }
         if (pctPower >= 11 && pctPower <= 20 ){
-            setOutput(numPin, Ordre_HorsGel);
+            changeOutput(numPin, Ordre_HorsGel);
         }
         if (pctPower >= 0 && pctPower <= 10 ){
-            setOutput(numPin, Ordre_Arret);
+            changeOutput(numPin, Ordre_Arret);
         }
     }
 
@@ -166,10 +160,11 @@ void setOutput(byte numPin, OrdreFilPilote newValue){
 }   // End setOutput
 
 void flushOutput(){
+    blink();
     // flush the output to the serial register
     digitalWrite(PIN_RCLK, LOW);                                    // Lock latch
-    shiftOut(PIN_SER, PIN_SRCLK, MSBFIRST, outputState & 0xff00);   // Push higher bits
-    shiftOut(PIN_SER, PIN_SRCLK, MSBFIRST, outputState & 0x00ff);   // Push lower bits
+    shiftOut(PIN_SER, PIN_SRCLK, MSBFIRST, outputState >> 8);   // Push higher bits
+    shiftOut(PIN_SER, PIN_SRCLK, MSBFIRST, outputState & 0xff);   // Push lower bits
     digitalWrite(PIN_RCLK, HIGH);                                   // Unlock latch
 }
 
@@ -210,6 +205,7 @@ void boardSetup(){
     pinMode( PIN_SER, OUTPUT);
     pinMode( PIN_RCLK, OUTPUT);
 
+    // RESET All bits
     outputState = 0;
     for (int i=0; i<SUBNODECOUNT; i++){
         outputStateKeeper[i]   = Ordre_Confort;
@@ -218,10 +214,7 @@ void boardSetup(){
     }
 
     // Set all outputs to ZERO.
-    digitalWrite(PIN_RCLK, LOW);                 // Lock latch
-    shiftOut(PIN_SER, PIN_SRCLK, MSBFIRST, 0);   // Push higher bits
-    shiftOut(PIN_SER, PIN_SRCLK, MSBFIRST, 0);   // Push lower bits
-    digitalWrite(PIN_RCLK, HIGH);                // Unlock latch
+    flushOutput();
 
     // The board is subscribed to his own baseTopic, in the baseBoardSetup function.
 
@@ -230,6 +223,7 @@ void boardSetup(){
 
 void boardLoop(){
     // Handle CONF_1 and CONF_2 command timers :
+
     for (int i=0; i<SUBNODECOUNT; i++){
         byte bit1, bit2;
         bit1 = i * 2;
@@ -254,5 +248,4 @@ void boardLoop(){
         }
 
     }
-
 } // End boardLoop

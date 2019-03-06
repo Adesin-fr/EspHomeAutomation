@@ -5,7 +5,7 @@
 #include <WiFiUdp.h>
 #include <ESP8266WebServer.h>
 #include <ESP8266mDNS.h>
-#include <ESP8266HTTPUpdateServer.h>
+#include <ESP8266HTTPUpdateServer.h>// To upload through terminal you can use: curl -F "image=@firmware.bin" esp8266-webupdate.local/update
 #include <PubSubClient.h>           // for the MQTT client
 #include <DNSServer.h>              // Needed for WiFiManager library
 #include <WiFiManager.h>            //https://github.com/tzapu/WiFiManager

@@ -8,8 +8,8 @@
       #define SUBNODECOUNT    8       // how many sub-nodes should we present
 
       #define PIN_SRCLK    12
-      #define PIN_SER      13
-      #define PIN_RCLK     14
+      #define PIN_RCLK     13
+      #define PIN_SER      14
 
       #define ON_VALUE      1
       #define OFF_VALUE     0
@@ -45,13 +45,14 @@
             void boardLoop();
             void handleBoardSettings();
             void mqttSendHassDiscovery();
-            void handleMqttIncomingMessage(char* topic, byte* payload, unsigned int length);
+            void handleMqttIncomingMessage(String myTopic, String sPayload);
 
       // Board specific custom functions :
 
             void flushOutput();
             void setOutput(byte numPin, OrdreFilPilote newValue);
             void reportOutputState(byte numPin);
+            void changeOutput(byte numPin, OrdreFilPilote newValue);
 
 
 #endif

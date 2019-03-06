@@ -18,21 +18,15 @@
 */
 
 
-void handleMqttIncomingMessage(char* topic, byte* payload, unsigned int length){
-    String sPayload="";
-    String myTopic= topic;
+void handleMqttIncomingMessage(String myTopic, String sPayload){
     String sOutNumber;
     byte numPin;
     long timerValue;
 
-    for (unsigned int i = 0; i < length; i++) {
-        sPayload += (char)payload[i];
-    }
-
     blink();
 
     // Handle generic topics
-    if (myTopic.indexOf("/setPower/")){
+    if (myTopic.indexOf("/setPower/")>0){
         // Extract the output number from the topic :
         // The topic should be like /myboard/setPower/7 , ie to toggle output 7
         sOutNumber= myTopic.substring(myTopic.indexOf("/setPower/")+10);
@@ -51,14 +45,14 @@ void handleMqttIncomingMessage(char* topic, byte* payload, unsigned int length){
             }
         }
 
-    }else if  (myTopic.indexOf("/setToggleTimer/")){
+    }else if  (myTopic.indexOf("/setToggleTimer/")>0){
         // Extract the output number from the topic :
         sOutNumber= myTopic.substring(myTopic.indexOf("/setToggleTimer/")+16);
         numPin = atoi(sOutNumber.c_str());
 
         // if the timer is already fired, we stop it
-        if (outputTimer[numPin]!=0){
-            outputTimer[numPin]=0;
+        if (outputStartedMillis[numPin]!=0){
+            outputStartedMillis[numPin]=0;
         }else{
             // Else we start the timer.
             // payload contains the timer value :
@@ -78,7 +72,7 @@ void handleMqttIncomingMessage(char* topic, byte* payload, unsigned int length){
             setOutput(numPin, ON_VALUE);
         }
 
-    }else if (myTopic.indexOf("/setTimerDefaultValue/")){
+    }else if (myTopic.indexOf("/setTimerDefaultValue/")>0){
         // Extract the output number from the topic :
         sOutNumber= myTopic.substring(myTopic.indexOf("/setTimerDefaultValue/")+22);
         numPin = atoi(sOutNumber.c_str());
@@ -95,10 +89,7 @@ void setOutput(byte numPin, boolean newValue){
     // Toggle the pin in the output Buffer:
     bitWrite(outputState, numPin, newValue);
 
-    // flush the output to the serial register
-	digitalWrite(PIN_RCLK, LOW);                             // Lock latch
-    shiftOut(PIN_SER, PIN_SRCLK, MSBFIRST, outputState);     // Push bits
-    digitalWrite(PIN_RCLK, HIGH);                            // Unlock latch
+    flushOutput();
 
     // Append in the lastEvents logs :
     // Keep track of the last 10 events :
@@ -137,6 +128,13 @@ void reportOutputState(byte numPin){
 
 void handleBoardSettings(){}
 
+void flushOutput(){
+    // flush the output to the serial register
+    digitalWrite(PIN_RCLK, LOW);                             // Lock latch
+    shiftOut(PIN_SER, PIN_SRCLK, LSBFIRST, outputState);     // Push bits
+    digitalWrite(PIN_RCLK, HIGH);                            // Unlock latch
+
+}
 
 void boardSetup(){
     String fileName;
@@ -150,10 +148,11 @@ void boardSetup(){
 
         // read default outputTimer in files :
         fileName = "/outputTimer" + String(i) + ".txt";
-        outputTimer[i]         = atoi(loadLineFromFile(fileName.c_str(),"0").c_str());    // Timer in SECONDS for each output
+        outputTimer[i]         = 0;    // Timer in SECONDS for each output
         outputStartedMillis[i] = 0;
     }
 
+    flushOutput();
     // The board is subscribed to his own baseTopic, in the baseBoardSetup function.
 
 
@@ -170,6 +169,7 @@ void boardLoop(){
             if (outputStartedMillis[i] + outputTimer[i] <= millis() ){
                 // The timer has expired, stop it !
                 outputStartedMillis[i] = 0;
+                outputTimer[i] = 0;
                 // Toggle the output.
                 setOutput(i, !bitRead(outputState, i));
                 reportOutputState(i);

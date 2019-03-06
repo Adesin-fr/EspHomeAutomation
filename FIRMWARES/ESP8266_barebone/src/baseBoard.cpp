@@ -17,7 +17,6 @@ EspSaveCrash SaveCrash;                   // Save crashes informations to EEPROM
 WiFiManager wifiManager;
 ESP8266HTTPUpdateServer httpUpdater(true);      // Web updater
 
-
 void blink(){
       #ifdef UseLED
           // Blink the LED.
@@ -259,7 +258,7 @@ void mqttMessageArrived(char* topic, byte* payload, unsigned int length) {
               ESP.restart();
           }
           // Now, handle node-specific topics ...
-          handleMqttIncomingMessage(topic, payload, length);
+          handleMqttIncomingMessage(myTopic, sPayload);
       } // End mqttMessageArrived
 
 /**
@@ -402,6 +401,13 @@ void baseSetup(){
                 String subscribedTopic;
                 subscribedTopic = baseTopic + "/#";
                 myMqtt.subscribe(subscribedTopic.c_str());
+
+                #ifdef UseSerial
+                    Serial.print("Subscribed to topic ");
+                    Serial.println(subscribedTopic.c_str());
+                    Serial.print("topic length is");
+                    Serial.println(subscribedTopic.length());
+                #endif
 
                 // Send last crash informations :
                 // Save first the crash to a file.

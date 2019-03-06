@@ -34,12 +34,13 @@
             void boardLoop();
             void handleBoardSettings();
             void mqttSendHassDiscovery();
-            void handleMqttIncomingMessage(char* topic, byte* payload, unsigned int length);
+            void handleMqttIncomingMessage(String myTopic, String sPayload);
 
       // Board specific custom functions :
 
             void setOutput(byte numPin, boolean newValue);
             void reportOutputState(byte numPin);
+            void flushOutput();
 
 
 #endif
