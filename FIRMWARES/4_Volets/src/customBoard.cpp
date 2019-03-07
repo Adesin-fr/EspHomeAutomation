@@ -6,8 +6,9 @@
     unsigned long previousTime  = 0;
     byte outputState            = 0;
     String lastEvents           = "";
-    int outputTimer[SUBNODECOUNT];    // Timer in SECONDS for each output
-    unsigned long outputStartedMillis[SUBNODECOUNT];    // Timer in SECONDS for each output
+    int outputTimer[SUBNODECOUNT];    // Timer in milliSeconds for each output
+    int defaultTimer[SUBNODECOUNT];    // Default timer in milliSeconds for each output
+    unsigned long outputStartedMillis[SUBNODECOUNT];
     RollerAction previousAction[SUBNODECOUNT];    // What was the previous state ?
     boolean invertAction[SUBNODECOUNT];           // Should the behavior of this output inverted
 
@@ -20,58 +21,59 @@
 */
 
 
-void handleMqttIncomingMessage(char* topic, byte* payload, unsigned int length){
-    String sPayload="";
-    String myTopic= topic;
+void handleMqttIncomingMessage(String myTopic, String sPayload){
     String sOutNumber;
-    byte numPin;
+    byte outNum;
     boolean messageHandled = false;
     byte nbLines=0;
     int pos;
 
-    for (unsigned int i = 0; i < length; i++) {
-        sPayload += (char)payload[i];
-    }
-
     blink();
 
     // Handle generic topics
-    if (myTopic.indexOf("/setPower/")){
+    if (myTopic.indexOf("/setAction/")>0){
         messageHandled = true;
         // Extract the output number from the topic :
         // The topic should be like /myboard/setPower/7 , ie to toggle output 7
-        sOutNumber= myTopic.substring(myTopic.indexOf("/setPower/")+10);
-        numPin = atoi(sOutNumber.c_str());
+        sOutNumber= myTopic.substring(myTopic.indexOf("/setAction/")+10);
+        outNum = atoi(sOutNumber.c_str());
+
+        outputTimer[outNum] = defaultTimer[outNum];
+
+        if (outNum<0 || outNum>SUBNODECOUNT-1){
+            return;
+        }
         if (sPayload == "OPEN"){
-            doActionRoller(numPin, Action_Open);
+            doActionRoller(outNum, Action_Open);
         }
         if (sPayload == "CLOSE"){
-            doActionRoller(numPin, Action_Close);
+            doActionRoller(outNum, Action_Close);
         }
         if (sPayload == "TOGGLE"){
             // If the roller is still moving, stop it !
-            if (outputStartedMillis[numPin] != 0){
-                doActionRoller(numPin, Action_Stop);
+            if (outputStartedMillis[outNum] != 0){
+                doActionRoller(outNum, Action_Stop);
             }else{
-                if (previousAction[numPin] == Action_Close){
-                    doActionRoller(numPin, Action_Open);
+                if (previousAction[outNum] == Action_Close){
+                    doActionRoller(outNum, Action_Open);
                 }else{
-                    doActionRoller(numPin, Action_Close);
+                    doActionRoller(outNum, Action_Close);
                 }
             }
         }
         if (sPayload == "STOP"){
-            doActionRoller(numPin, Action_Stop);
+            doActionRoller(outNum, Action_Stop);
         }
 
-    }else if (myTopic.indexOf("/setPosition/")){
+    }else if (myTopic.indexOf("/setPosition/")>0){
         messageHandled = true;
         // Extract the output number from the topic :
         sOutNumber= myTopic.substring(myTopic.indexOf("/setPosition/")+13);
-        numPin = atoi(sOutNumber.c_str());
+        outNum = atoi(sOutNumber.c_str());
         // Set the new timer value
         // The payload contains the position in percent.
-        //  atoi(sPayload.c_str());
+        byte percent = atoi(sPayload.c_str());
+        outputTimer[outNum] = defaultTimer[outNum] * percent / 100;
     }
 
     // Only record this event if we could handle it !
@@ -89,10 +91,8 @@ void handleMqttIncomingMessage(char* topic, byte* payload, unsigned int length){
             lastEvents = lastEvents.substring(pos); // Take the string after the first carriage.
         }
         // Append the event at the end of the string.
-        lastEvents += "Output " + String(numPin) + " Action " + sPayload + "<BR>\n";
+        lastEvents += "Output " + String(outNum) + " Action " + sPayload + "<BR>\n";
 
-        // Report new pin State:
-        reportOutputState(numPin);
     }
 
 }   // End handleMqttIncomingMessage
@@ -123,9 +123,16 @@ void doActionRoller(byte outputNumber, RollerAction action){
         case Action_Stop:
             setOutputPin(outputNumber * 2    , OFF_VALUE);
             setOutputPin(outputNumber * 2 +1 , OFF_VALUE);
+            // Compute how much time did passed from begining of action and now :
+            long timePassed = millis() - outputStartedMillis[outputNumber];
+            byte percentPosition = timePassed * 100 / defaultTimer[outputNumber];
             outputStartedMillis[outputNumber] = 0;
+            reportPosition(outputNumber, percentPosition);
             break;
     }
+
+    // Report new pin State:
+    reportOutputState(outputNumber, action);
 }
 
 void setOutputPin(byte numPin, boolean newValue){
@@ -135,21 +142,36 @@ void setOutputPin(byte numPin, boolean newValue){
 
     // flush the output to the serial register
 	digitalWrite(PIN_RCLK, LOW);                             // Lock latch
-    shiftOut(PIN_SER, PIN_SRCLK, MSBFIRST, outputState);     // Push bits
+    shiftOut(PIN_SER, PIN_SRCLK, LSBFIRST, outputState);     // Push bits
     digitalWrite(PIN_RCLK, HIGH);                            // Unlock latch
 
 }   // End setOutput
 
 
-void reportOutputState(byte numPin){
+void reportPosition(byte numPin, byte currentPositionPercent){
+    String reportTopic="";
+    String payload="";
+
+    reportTopic = baseTopic +   "/position/" + String(numPin);
+    payload = currentPositionPercent;
+    myMqtt.publish(reportTopic.c_str(), payload.c_str());
+
+}   // End reportPosition
+
+
+
+void reportOutputState(byte numPin, RollerAction currentAction){
     String reportTopic="";
     String payload="";
 
     reportTopic = baseTopic +   "/state/" + String(numPin);
-    if (bitRead(outputState, numPin)==ON_VALUE){
-        payload = "ON";
-    }else{
-        payload = "OFF";
+    switch(currentAction){
+        case Action_Open:
+            payload = "OPENING";
+        case Action_Close:
+            payload = "CLOSING";
+        case Action_Stop:
+            payload = "STOPPED";
     }
     myMqtt.publish(reportTopic.c_str(), payload.c_str());
 
@@ -158,7 +180,7 @@ void reportOutputState(byte numPin){
 
 void handleBoardSettings(){
     // Output Inverted
-    // Output Timer 
+    // Output Default Timer
 }
 
 void boardSetup(){
@@ -169,18 +191,18 @@ void boardSetup(){
     pinMode( PIN_RCLK, OUTPUT);
 
     for (int i=0; i<SUBNODECOUNT; i++){
-        bitWrite(outputState, i, OFF_VALUE);
-
-        // read default outputTimer in files :
-        fileName = "/outputTimer" + String(i) + ".txt";
-        outputTimer[i]         = atoi(loadStringFromFile(fileName.c_str(),"0").c_str());    // Timer in SECONDS for each output
+        setOutputPin(i*2, 0);
+        setOutputPin(i*2 +1 , 0);
+        // read defaultTimer in files :
+        fileName = "/defaultTimer" + String(i) + ".txt";
+        defaultTimer[i]        = atoi(loadStringFromFile(fileName.c_str(),"0").c_str());    // Timer in SECONDS for each output
         outputStartedMillis[i] = 0;
         previousAction[i]      = Action_Close;
+        outputTimer[i]         = 0;
     }
 
     // The board is subscribed to his own baseTopic, in the baseBoardSetup function.
-
-
+    // There is no need to subscribe to subTopics.
 
 } // End boardSetup
 

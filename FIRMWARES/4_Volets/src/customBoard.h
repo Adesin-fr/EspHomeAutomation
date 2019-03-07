@@ -22,13 +22,14 @@
                 Action_Stop
           };
 
-      extern      unsigned long previousTime ;
-      extern      byte outputState;
-      extern      String lastEvents;
-      extern      int outputTimer[SUBNODECOUNT];    // Timer in SECONDS for each output
-      extern      unsigned long outputStartedMillis[SUBNODECOUNT];    // Timer in SECONDS for each output
-      extern      RollerAction previousAction[SUBNODECOUNT];    // What was the previous state ?
-      extern      boolean invertAction[SUBNODECOUNT];           // Should the behavior of this output inverted
+    extern      unsigned long previousTime ;
+    extern      byte outputState;
+    extern      String lastEvents;
+    extern      int outputTimer[SUBNODECOUNT];    // Timer in SECONDS for each output
+    extern      int defaultTimer[SUBNODECOUNT];    // Default timer in SECONDS for each output
+    extern      unsigned long outputStartedMillis[SUBNODECOUNT];    // Timer in SECONDS for each output
+    extern      RollerAction previousAction[SUBNODECOUNT];    // What was the previous state ?
+    extern      boolean invertAction[SUBNODECOUNT];           // Should the behavior of this output inverted
 
 
 
@@ -45,13 +46,14 @@
             void boardLoop();
             void handleBoardSettings();
             void mqttSendHassDiscovery();
-            void handleMqttIncomingMessage(char* topic, byte* payload, unsigned int length);
+            void handleMqttIncomingMessage(String myTopic, String sPayload);
 
       // Board specific custom functions :
 
             void setOutputPin(byte numPin, boolean newValue);
-            void reportOutputState(byte numPin);
             void doActionRoller(byte outputNumber, RollerAction action);
+            void reportOutputState(byte numPin, RollerAction currentAction);
+            void reportPosition(byte numPin, byte currentPositionPercent);
 
 
 #endif
