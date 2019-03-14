@@ -22,11 +22,14 @@
 
 
 void handleMqttIncomingMessage(String myTopic, String sPayload){
-    String sOutNumber;
-    byte numPin;
-    long timerValue;
 
     blink();
+
+    // Load default timer value :
+    if (defaultTimer==0){
+        defaultTimer = atoi(loadStringFromFile("/defaultTimer.txt", "5").c_str());
+    }
+
 
     // Handle generic topics
     if (myTopic.indexOf("/setPower")>0){
@@ -39,37 +42,61 @@ void handleMqttIncomingMessage(String myTopic, String sPayload){
             setOutputPin(0, OFF_VALUE);
         }
     }
-    if (myTopic.indexOf("/setAction/")>0){
+    if (myTopic.indexOf("/setAction")>0){
         // Extract the output number from the topic :
         // The topic should be like /myboard/setPower/7 , ie to toggle output 7
+        if (sPayload == "STOP" ){
+            setOutputPin(0, OFF_VALUE);
+            setOutputPin(1, OFF_VALUE);
+            setOutputPin(2, OFF_VALUE);
+            // Start the timer
+            outputStartedMillis = 0;
+            reportOutputState();
+        }
         if (sPayload == "ON" || sPayload == "OPEN"){
             setOutputPin(0, ON_VALUE);
             setOutputPin(1, ON_VALUE);
             setOutputPin(2, OFF_VALUE);
             // Start the timer
             outputStartedMillis = millis();
+            outputTimer = defaultTimer * 1000;
             previousAction = Action_Open;
         }
         if (sPayload == "OFF" || sPayload == "CLOSE"){
-            setOutputPin(0, OFF_VALUE);
+            setOutputPin(0, ON_VALUE);
+            setOutputPin(1, OFF_VALUE);
             setOutputPin(2, ON_VALUE);
             // Start the timer
             outputStartedMillis = millis();
             previousAction = Action_Close;
+            outputTimer = defaultTimer * 1000;
         }
         if (sPayload == "TOGGLE"){
-            setOutputPin(1, ON_VALUE);
-            if (previousAction == Action_Open){
+            if (outputStartedMillis!=0){
+                // Stop now...
                 setOutputPin(0, OFF_VALUE);
-                setOutputPin(2, ON_VALUE);
-                previousAction = Action_Close;
-            }else{
-                setOutputPin(1, ON_VALUE);
+                setOutputPin(1, OFF_VALUE);
                 setOutputPin(2, OFF_VALUE);
-                previousAction = Action_Open;
+                // Start the timer
+                outputStartedMillis = 0;
+                reportOutputState();
+            }else{
+                // Toggle...
+                setOutputPin(0, ON_VALUE);
+                if (previousAction == Action_Open){
+                    setOutputPin(1, OFF_VALUE);
+                    setOutputPin(2, ON_VALUE);
+                    previousAction = Action_Close;
+                    outputTimer = defaultTimer * 1000;
+                }else{
+                    setOutputPin(1, ON_VALUE);
+                    setOutputPin(2, OFF_VALUE);
+                    previousAction = Action_Open;
+                    outputTimer = defaultTimer * 1000;
+                }
+                // Start the timer
+                outputStartedMillis = millis();
             }
-            // Start the timer
-            outputStartedMillis = millis();
         }
 
     }
@@ -77,8 +104,6 @@ void handleMqttIncomingMessage(String myTopic, String sPayload){
 }   // End handleMqttIncomingMessage
 
 void setOutputPin(byte numPin, boolean newValue){
-    byte nbLines=0;
-    int pos;
 
     // Toggle the pin in the output Buffer:
     bitWrite(outputState, numPin, newValue);
@@ -106,9 +131,26 @@ void reportOutputState(){
 }   // End reportOutputState
 
 
-void handleBoardSettings(){
 
-}
+void handleBoardSettings() {
+    blink();
+    String output="";
+
+    output += "<div align='center'><h1>Board Settings</h1></div><br>";
+    output += "<table border=1><th>Setting Name</th><th>Value</th>";
+
+    output += "<form action='/setNewSetting'><tr><td>Cover movement timer (seconds) :</td><td><input name='defaultTimer' value='" + String(defaultTimer) + "'> <input type=submit value='Change'></td></tr></form>";
+
+    output += "</table><br>";
+    output += "<form action='/reboot' ><input type=submit value='Reboot'></form><br><br><br>";
+
+    if (needReboot){
+        output += "<font color='red'><b>Settings has changed, a reboot is needed !</b></font>";
+    }
+
+    server.send(200, "text/html", output);
+
+} // End handleBoardSettings
 
 
 void boardSetup(){
@@ -124,8 +166,9 @@ void boardSetup(){
     outputTimer         = 0;    // Timer in SECONDS for each output
     outputStartedMillis = 0;
 
+    // Reset all outputs to OFF
     setOutputPin(0, OFF_VALUE);
-    // The board is subscribed to his own baseTopic, in the baseBoardSetup function.
+
 
 } // End boardSetup
 

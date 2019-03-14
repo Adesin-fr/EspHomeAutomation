@@ -1,1 +1,1 @@
-../../ESP8266_barebone/src/baseBoard.h
+/home/ludovic/Nextcloud/electronique/PROJETS/EspHomeAutomation/FIRMWARES/ESP8266_barebone/src/baseBoard.h

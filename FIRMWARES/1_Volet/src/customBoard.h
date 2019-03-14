@@ -49,9 +49,7 @@
       // Board specific custom functions :
 
             void setOutputPin(byte numPin, boolean newValue);
-            void doActionRoller(byte outputNumber, RollerAction action);
-            void reportOutputState(byte numPin, RollerAction currentAction);
-            void reportPosition(byte numPin, byte currentPositionPercent);
+            void reportOutputState();
 
 
 #endif
