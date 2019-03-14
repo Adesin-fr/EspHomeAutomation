@@ -3,16 +3,14 @@
     // Board specific variables
 
 
-    unsigned long previousTime  = 0;
-    byte outputState            = 0;
-    String lastEvents           = "";
-    int outputTimer;                                    // Timer in SECONDS left for this cover
-    byte setupTimer;                                    // Timer in SECONDS setup for this cover
-    unsigned long outputStartedMillis;                  // At which time we did started the timer ?
-    unsigned long LastReportMillis;                     // At which time did we report status ?
-    byte previouslyOpening;                             // Were we opening last time we moved ?
-    byte HighValue              = 1;                    // Values used to set the H Bridge
-    byte LowValue               = 0;                    // Can be reversed in settings
+    unsigned long previousTime ;
+    byte outputState;
+    String lastEvents;
+    int outputTimer;    // Timer in SECONDS for each output
+    int defaultTimer;    // Default timer in SECONDS for each output
+    unsigned long outputStartedMillis;    // Timer in SECONDS for each output
+    RollerAction previousAction;    // What was the previous state ?
+    boolean invertAction;           // Should the behavior of this output inverted
 
 /*
         Minimum functions to be implemented :
@@ -23,176 +21,83 @@
 */
 
 
-void handleBoardSettings() {
-      blink();
-      String output="";
-      String lineData;
-      String reportTopic;
-      String payload;
-
-      output += "<div align='center'><h1>Settings</h1></div><br>";
-      output += "<br>Current settings :<br>";
-
-      if (SPIFFSAvailable){
-          /*
-            TODO : Settings to implement :
-                Reverse direction
-                Opening time
-          */
-          // output += "Payload : <input type=text name=pload><input type=submit value='Save'></form><br>";
-      }else{
-        output += "<font color='red'><b>SPIFFS NOT AVAILABLE !</b></font>";
-      }
-      output += "Last events :<br>";
-      output += "<blockquote>" + lastEvents + "</blockquote>";
-
-      output += "<br><br><a href='/advSettings'>Advanced Settings</a>";
-
-      output += "<br><br><font size='-5'><a href='/ClearAll'>Clear all settings</a></font>";
-
-
-      server.send(200, "text/html", output);
-} // End handleBoardSettings
-
-
-void handleMqttIncomingMessage(char* topic, byte* payload, unsigned int length){
-    String sPayload="";
-    String myTopic= topic;
+void handleMqttIncomingMessage(String myTopic, String sPayload){
     String sOutNumber;
-
-    for (unsigned int i = 0; i < length; i++) {
-        sPayload += (char)payload[i];
-    }
+    byte numPin;
+    long timerValue;
 
     blink();
 
-    if (myTopic.indexOf("/action")){
-        // The topic should be like /myboard/action [OPEN|CLOSE|TOGGLE]
-        // Toggle the power relay ON
-        if (sPayload == "OPEN"){
-            lastEvents += "Received an OPEN action\n";
-            openCover();
+    // Handle generic topics
+    if (myTopic.indexOf("/setPower")>0){
+        // Extract the output number from the topic :
+        // The topic should be like /myboard/setPower/7 , ie to toggle output 7
+        if (sPayload == "ON"){
+            setOutputPin(0, ON_VALUE);
         }
-        if (sPayload == "CLOSE"){
-            lastEvents += "Received a CLOSE action\n";
-            closeCover();
+        if (sPayload == "OFF"){
+            setOutputPin(0, OFF_VALUE);
         }
-        if (sPayload == "STOP"){
-            lastEvents += "Received a STOP action\n";
-            stopCover();
+    }
+    if (myTopic.indexOf("/setAction/")>0){
+        // Extract the output number from the topic :
+        // The topic should be like /myboard/setPower/7 , ie to toggle output 7
+        if (sPayload == "ON" || sPayload == "OPEN"){
+            setOutputPin(0, ON_VALUE);
+            setOutputPin(1, ON_VALUE);
+            setOutputPin(2, OFF_VALUE);
+            // Start the timer
+            outputStartedMillis = millis();
+            previousAction = Action_Open;
+        }
+        if (sPayload == "OFF" || sPayload == "CLOSE"){
+            setOutputPin(0, OFF_VALUE);
+            setOutputPin(2, ON_VALUE);
+            // Start the timer
+            outputStartedMillis = millis();
+            previousAction = Action_Close;
         }
         if (sPayload == "TOGGLE"){
-            lastEvents += "Received a TOGGLE action: ";
-            // We are already moving, so stop the cover !
-            if (outputStartedMillis!=0){
-                lastEvents += "Stopping the cover\n";
-                stopCover();
+            setOutputPin(1, ON_VALUE);
+            if (previousAction == Action_Open){
+                setOutputPin(0, OFF_VALUE);
+                setOutputPin(2, ON_VALUE);
+                previousAction = Action_Close;
             }else{
-                // We are not moving, move now.
-                if (previouslyOpening){
-                    lastEvents += "Closing the cover\n";
-                    closeCover();
-                }else{
-                    lastEvents += "Opening the cover\n";
-                    openCover();
-                }
+                setOutputPin(1, ON_VALUE);
+                setOutputPin(2, OFF_VALUE);
+                previousAction = Action_Open;
             }
+            // Start the timer
+            outputStartedMillis = millis();
         }
 
-    }else if  (myTopic.indexOf("/setPosition/")){
-        // Set the output timer :
-        // TODO: convert the percent position to timer :
-        outputTimer = atoi(sPayload.c_str());
-        if (outputTimer > setupTimer){
-            outputTimer = setupTimer;
-        }
-        if (outputTimer!=0 ){
-            lastEvents += "Received a SETPOSITION to action\n";
-            outputStartedMillis = millis();
-            flushOutput();
-        }
     }
 
 }   // End handleMqttIncomingMessage
 
-
-void flushOutput(){
+void setOutputPin(byte numPin, boolean newValue){
     byte nbLines=0;
     int pos;
 
+    // Toggle the pin in the output Buffer:
+    bitWrite(outputState, numPin, newValue);
+
     // flush the output to the serial register
-	digitalWrite(PIN_RCLK, LOW);                             // Lock latch
-    shiftOut(PIN_SER, PIN_SRCLK, MSBFIRST, outputState);     // Push bits
+    digitalWrite(PIN_RCLK, LOW);                             // Lock latch
+    shiftOut(PIN_SER, PIN_SRCLK, LSBFIRST, outputState);     // Push bits
     digitalWrite(PIN_RCLK, HIGH);                            // Unlock latch
 
-    // Trim the lastEvents logs :
-    // Keep track of the last 10 events :
-    // Count how many \n we have, if we have more thant 10, remove the first line
-    for (unsigned int i=0; i<lastEvents.length(); i++){
-        if (lastEvents.c_str()[i]=='\n'){
-            nbLines++;
-        }
-    }
-    if (nbLines>10){
-        pos=lastEvents.indexOf('\n');           // Get the position of the first carriage return
-        lastEvents = lastEvents.substring(pos); // Take the string after the first carriage.
-    }
-
-}   // End setOutput
-
-
-void openCover(){
-    bitWrite(outputState, 7, HighValue);
-    bitWrite(outputState, 6, LowValue);
-    bitWrite(outputState, 5, HighValue);
-    previouslyOpening = true;
-
-    // Start the timer.
-    outputStartedMillis = millis();
-    outputTimer = setupTimer;
-    flushOutput();
-}
-
-
-void closeCover(){
-    bitWrite(outputState, 7, HighValue);
-    bitWrite(outputState, 6, HighValue);
-    bitWrite(outputState, 5, LowValue);
-    previouslyOpening = false;
-
-    // Start the timer.
-    outputStartedMillis = millis();
-    outputTimer = setupTimer;
-    flushOutput();
-}
-
-
-void stopCover(){
-    bitWrite(outputState, 7, LowValue);
-    bitWrite(outputState, 6, LowValue);
-    bitWrite(outputState, 5, LowValue);
-
-    flushOutput();
-
-    previouslyOpening = false;
-    outputStartedMillis = 0;
-    reportOutputState();
-}
-
+}   // End setOutputPin
 
 
 void reportOutputState(){
     String reportTopic="";
     String payload="";
 
-    /*
-     * Currently, we only report two states.
-     * Later, we should report the percentage of opening.
-     */
-
-    reportTopic = baseTopic + "/state";
-    if (previouslyOpening == true){
-        payload = "OPENED";
+    reportTopic = baseTopic +   "/state";
+    if (previousAction == Action_Open){
+        payload = "OPEN";
     }else{
         payload = "CLOSED";
     }
@@ -201,18 +106,26 @@ void reportOutputState(){
 }   // End reportOutputState
 
 
+void handleBoardSettings(){
+
+}
+
+
 void boardSetup(){
+    String fileName;
     // Set pins mode :
     pinMode( PIN_SRCLK, OUTPUT);
     pinMode( PIN_SER, OUTPUT);
     pinMode( PIN_RCLK, OUTPUT);
 
-    // read default outputTimer in file :
-    setupTimer         = atoi(loadLineFromFile("/setupTimer.txt","0").c_str());    // Timer in SECONDS for each output
+    outputState=0;
+
+    // read default outputTimer in files :
+    outputTimer         = 0;    // Timer in SECONDS for each output
     outputStartedMillis = 0;
 
+    setOutputPin(0, OFF_VALUE);
     // The board is subscribed to his own baseTopic, in the baseBoardSetup function.
-
 
 } // End boardSetup
 
@@ -220,25 +133,17 @@ void boardSetup(){
 
 void boardLoop(){
     // Should we shut off any output that timer as ended ?
-    if (outputStartedMillis!=0){
+    if (outputStartedMillis != 0){
         // This timer needs to be checked ;
         if (outputStartedMillis + outputTimer <= millis() ){
             // The timer has expired, stop it !
             outputStartedMillis = 0;
-            // Set the output to OFF.
-            bitWrite(outputState, 7, LowValue);
-            bitWrite(outputState, 6, LowValue);
-            bitWrite(outputState, 5, LowValue);
-            flushOutput();
+            outputTimer = 0;
+            // Toggle the output.
+            setOutputPin(0, OFF_VALUE);
+            setOutputPin(1, OFF_VALUE);
+            setOutputPin(2, OFF_VALUE);
             reportOutputState();
-        }
-
-        // We are moving, so refresh our state :
-        if (millis() > LastReportMillis+1000 ){
-            LastReportMillis = millis();
-            // TODO : evaluate opening percentage....
-            // reportOutputState();
-
         }
     }
 

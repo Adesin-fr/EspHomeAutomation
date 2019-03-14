@@ -4,14 +4,6 @@
 #include "baseBoard.h"
 
 // Board specific defines :
-/*
- * 3 pins de l'ULN sont utilisés : OUT1,2,3. Cela correspond aux bits 7,6,5 du shift register.
-    OUT1 correspond au relais d'alimentation
-    OUT2 et 3 pilotent le pont en H
- */
-
-      #define SUBNODECOUNT    1       // how many sub-nodes should we present
-
 
       #define PIN_SRCLK    12
       #define PIN_SER      13
@@ -22,14 +14,23 @@
 
 // Board specific variables :
 
-      extern      unsigned long previousTime ;
-      extern      byte outputState;
-      extern      String lastEvents;                    // Save the last 10 events for logging
-      extern      byte setupTimer;                      // Timer in SECONDS setup for this cover
-      extern      int outputTimer;                      // Timer in SECONDS left for this cover
-      extern      unsigned long outputStartedMillis;    // at which time we did started the timer ?
-      extern      unsigned long LastReportMillis;       // At which time did we report status ?
-      extern      byte previouslyOpening;               // Were we opening last time we moved ?
+    enum RollerAction {
+                Action_Open,
+                Action_Close,
+                Action_Stop
+          };
+
+    extern      unsigned long previousTime ;
+    extern      byte outputState;
+    extern      String lastEvents;
+    extern      int outputTimer;    // Timer in SECONDS for each output
+    extern      int defaultTimer;    // Default timer in SECONDS for each output
+    extern      unsigned long outputStartedMillis;    // Timer in SECONDS for each output
+    extern      RollerAction previousAction;    // What was the previous state ?
+    extern      boolean invertAction;           // Should the behavior of this output inverted
+
+
+
 
 /*  Board specific MANDATORY functions :
     These functions must be implemented :
@@ -43,16 +44,14 @@
             void boardLoop();
             void handleBoardSettings();
             void mqttSendHassDiscovery();
-            void handleMqttIncomingMessage(char* topic, byte* payload, unsigned int length);
+            void handleMqttIncomingMessage(String myTopic, String sPayload);
 
       // Board specific custom functions :
 
-            void openCover();
-            void closeCover();
-            void stopCover();
-
-            void flushOutput();
-            void reportOutputState();
+            void setOutputPin(byte numPin, boolean newValue);
+            void doActionRoller(byte outputNumber, RollerAction action);
+            void reportOutputState(byte numPin, RollerAction currentAction);
+            void reportPosition(byte numPin, byte currentPositionPercent);
 
 
 #endif

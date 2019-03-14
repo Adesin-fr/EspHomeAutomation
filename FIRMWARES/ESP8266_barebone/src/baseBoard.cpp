@@ -1,17 +1,19 @@
 #include "baseBoard.h"
 #include "customBoard.h"
 
-String baseTopic;
-boolean mqttConnected=false;
-String mqttServer;
-unsigned int mqttPort;
-unsigned int webServerPort;
-unsigned int MQTT_NUM_TRIES;      // How many times should we try to connect to mqtt broker ?
-boolean SPIFFSAvailable=false;
-boolean needReboot=false;
+    String baseTopic;
+    boolean mqttConnected=false;
+    String mqttServer;
+    unsigned int mqttPort;
+    unsigned int webServerPort;
+    unsigned int MQTT_NUM_TRIES;      // How many times should we try to connect to mqtt broker ?
+    boolean SPIFFSAvailable=false;
+    boolean needReboot=false;
+    String myHostName;
+    unsigned int mqttReportFrequency;  // delay in seconds between MQTT Reports
+
 WiFiClient espClient;
 PubSubClient myMqtt(espClient);
-String myHostName;
 ESP8266WebServer server(8000);
 EspSaveCrash SaveCrash;                   // Save crashes informations to EEPROM to retrieve later !
 WiFiManager wifiManager;
@@ -75,6 +77,7 @@ void handleAdvancedSettings(){
           output += "<form action='/setNewSetting'><tr><td>Mqtt Server Port :</td><td><input name='mqttServerPort' value='" + String(mqttPort) + "'> <input type=submit value='Change'></td></tr></form>";
           output += "<form action='/setNewSetting'><tr><td>Mqtt Base Topic :</td><td><input name='mqttBaseTopic' value='" + baseTopic + "'> <input type=submit value='Change'></td></tr></form>";
           output += "<form action='/setNewSetting'><tr><td>Mqtt Connection tries :</td><td><input name='mqttNumTries' value='" + String(MQTT_NUM_TRIES) + "'> <input type=submit value='Change'></td></tr></form>";
+          output += "<form action='/setNewSetting'><tr><td>Mqtt Report frequency :</td><td><input name='mqttReportFrequency' value='" + String(mqttReportFrequency) + "'> <input type=submit value='Change'></td></tr></form>";
 
           output += "</table><br>";
           output += "<form action='/reboot' ><input type=submit value='Reboot'></form><br><br><br>";
@@ -312,6 +315,7 @@ void baseSetup(){
                 webServerPort = atoi(loadStringFromFile("/webServerPort.txt", "8000").c_str());
                 mqttPort =  atoi(loadStringFromFile("/mqttServerPort.txt", "1883").c_str());
                 MQTT_NUM_TRIES =  atoi(loadStringFromFile("/mqttNumTries.txt", "5").c_str());
+                mqttReportFrequency = atoi(loadStringFromFile("/mqttReportFrequency.txt", "300").c_str());
 
                 baseTopic = String("/esp/") + myHostName;
                 baseTopic = loadStringFromFile("/mqttBaseTopic.txt", baseTopic.c_str());
@@ -391,6 +395,12 @@ void baseSetup(){
                 // Always send a MQTT Report at startup
                 mqttReport();
 
+                // Send reset cause :
+                String reportTopic;
+                reportTopic = baseTopic + "/system/resetReason";
+                myMqtt.publish(reportTopic.c_str(), ESP.getResetReason().c_str() );
+
+
                 #ifdef HASS_AUTODISCOVERY
                     // Send MQTT Home assistant Discovery messages
                     mqttSendHassDiscovery();
@@ -420,7 +430,7 @@ void baseSetup(){
                 // Then send the crash info via MQTT.
                 File fr = SPIFFS.open("/crash.txt","r");
                 String lineData;
-                String reportTopic;
+
                 reportTopic =  baseTopic + "/crash";
                 while(fr.available()) {
                     lineData = fr.readStringUntil('\n');
@@ -481,7 +491,7 @@ void baseLoop(){
 
     // Should we post a mqtt report ?
     unsigned long diff = millis() - previousTime;
-    if(diff > (mqttReportInterval*1000)) {
+    if(diff > (mqttReportFrequency*1000)) {
         mqttReport();
         previousTime = millis();
     }

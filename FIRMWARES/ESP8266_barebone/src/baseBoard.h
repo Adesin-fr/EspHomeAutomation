@@ -18,7 +18,6 @@
     #define BlueLED         2       // This led is on the ESP12F board
     #define LED_ON          0
     #define LED_OFF         1
-    #define mqttReportInterval   30    // mqtt report every 60 seconds
 
 
     // Variables need to be extern ! They are initialized in the .cpp file
@@ -31,6 +30,7 @@
     extern    unsigned int mqttPort;
     extern    unsigned int webServerPort;
     extern    unsigned int MQTT_NUM_TRIES;      // How many times should we try to connect to mqtt broker ?
+    extern    unsigned int mqttReportFrequency;  // delay in seconds between MQTT Reports
     extern    boolean SPIFFSAvailable;
     extern    boolean needReboot;
     extern    WiFiClient espClient;
