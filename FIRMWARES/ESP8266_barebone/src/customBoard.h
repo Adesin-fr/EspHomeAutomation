@@ -26,7 +26,7 @@
             void boardLoop();
             void handleBoardSettings();
             void mqttSendHassDiscovery();
-            void handleMqttIncomingMessage(char* topic, byte* payload, unsigned int length);
+            void handleMqttIncomingMessage(String topic, String payload);
 
       // Board specific custom functions :
 

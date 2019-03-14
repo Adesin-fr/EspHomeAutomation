@@ -39,6 +39,8 @@
     extern    ESP8266WebServer server;
     extern    EspSaveCrash SaveCrash;                   // Save crashes informations to EEPROM to retrieve later !
     extern    WiFiManager wifiManager;
+    extern    unsigned long wifiLostTime;
+    extern    unsigned long previousMqttReportTime;
 
     void blink();
     void handleReboot();

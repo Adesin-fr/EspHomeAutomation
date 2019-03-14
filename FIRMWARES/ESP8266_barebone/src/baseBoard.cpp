@@ -11,6 +11,8 @@
     boolean needReboot=false;
     String myHostName;
     unsigned int mqttReportFrequency;  // delay in seconds between MQTT Reports
+    unsigned long wifiLostTime=0;
+    unsigned long previousMqttReportTime=0;
 
 WiFiClient espClient;
 PubSubClient myMqtt(espClient);
@@ -33,7 +35,7 @@ void handleResetWifi(){
         wifiManager.resetSettings();
     }
 
-
+// http request to reboot
 void handleReboot() {
           blink();
           String output="";
@@ -359,6 +361,8 @@ void baseSetup(){
                 Serial.print("Hostname:\t");
                 Serial.println(WiFi.hostname());
             #endif
+            // Set auto reconnect :
+            WiFi.setAutoReconnect(true);
 
 
             /*
@@ -475,11 +479,19 @@ void baseSetup(){
 void baseLoop(){
     // Check if Wifi is still connected :
     if (WiFi.status() != WL_CONNECTED){
-        #ifdef UseSerial
-            Serial.println("Wifi disconnected. Reseting !");
-        #endif
-        delay(100);
-        ESP.restart();
+
+        // keep the time at which we lost connection.
+        if (wifiLostTime==0) wifiLostTime=millis();
+
+        // if we couldnt reconnect within 10s, Reset.
+        if (millis() - wifiLostTime >= 10000){
+            #ifdef UseSerial
+                Serial.println("Wifi disconnected. Reseting !");
+            #endif
+            ESP.restart();
+        }
+    }else{
+        wifiLostTime=0;
     }
     // Handle http client requests:
     server.handleClient();
@@ -490,10 +502,10 @@ void baseLoop(){
     }
 
     // Should we post a mqtt report ?
-    unsigned long diff = millis() - previousTime;
-    if(diff > (mqttReportFrequency*1000)) {
+
+    if(millis() - previousMqttReportTime > (mqttReportFrequency*1000)) {
         mqttReport();
-        previousTime = millis();
+        previousMqttReportTime = millis();
     }
 
 }

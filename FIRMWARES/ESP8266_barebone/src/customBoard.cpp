@@ -27,7 +27,7 @@ void handleBoardSettings() {
 } // End handleBoardSettings
 
 
-void handleMqttIncomingMessage(char* topic, byte* payload, unsigned int length){
+void handleMqttIncomingMessage(String topic, String payload){
     // This function must be defined, even if left empty
 }
 
